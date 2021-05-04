@@ -6,7 +6,7 @@
    version="1.0"
    description=""
    tags=""
-   categories="" />
+   categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
    element AV_Config
@@ -575,7 +575,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName" value="" />
+ <parameter name="projectName">DE2_115_Computer.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -745,10 +745,10 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="12" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="11" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="12" />
-  <parameter name="AUTO_UNIQUE_ID">Computer_System_Audio_Subsystem</parameter>
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="11" />
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_Audio_Subsystem</parameter>
  </module>
  <module
    name="Char_LCD_16x2"
@@ -864,7 +864,7 @@
    name="Interval_Timer_2nd_Core"
    kind="altera_avalon_timer"
    version="18.1"
-   enabled="1">
+   enabled="0">
   <parameter name="alwaysRun" value="false" />
   <parameter name="counterSize" value="32" />
   <parameter name="fixedPeriod" value="false" />
@@ -880,7 +880,7 @@
    name="Interval_Timer_2nd_Core_2"
    kind="altera_avalon_timer"
    version="18.1"
-   enabled="1">
+   enabled="0">
   <parameter name="alwaysRun" value="false" />
   <parameter name="counterSize" value="32" />
   <parameter name="fixedPeriod" value="false" />
@@ -924,7 +924,7 @@
    name="JTAG_UART_2nd_Core"
    kind="altera_avalon_jtag_uart"
    version="18.1"
-   enabled="1">
+   enabled="0">
   <parameter name="allowMultipleConnections" value="false" />
   <parameter name="avalonSpec" value="2.0" />
   <parameter name="clkFreq" value="50000000" />
@@ -954,8 +954,8 @@
   <parameter name="USE_PLI" value="0" />
  </module>
  <module name="Nios2" kind="altera_nios2_gen2" version="18.1" enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="12" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="12" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="11" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="11" />
   <parameter name="AUTO_DEVICE" value="EP4CE115F29C8" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
   <parameter name="bht_ramBlockType" value="Automatic" />
@@ -1135,7 +1135,7 @@
    name="Nios2_2nd_Core"
    kind="altera_nios2_gen2"
    version="18.1"
-   enabled="1">
+   enabled="0">
   <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="12" />
   <parameter name="AUTO_CLK_RESET_DOMAIN" value="12" />
   <parameter name="AUTO_DEVICE" value="EP4CE115F29C8" />
@@ -1317,7 +1317,7 @@
    name="Nios2_2nd_Core_Floating_Point"
    kind="altera_nios_custom_instr_floating_point"
    version="18.1"
-   enabled="1">
+   enabled="0">
   <parameter name="useDivider" value="1" />
  </module>
  <module
@@ -1391,7 +1391,7 @@
   <parameter name="casLatency" value="3" />
   <parameter name="clockRate" value="50000000" />
   <parameter name="columnWidth" value="10" />
-  <parameter name="componentName">Computer_System_SDRAM</parameter>
+  <parameter name="componentName" value="$${FILENAME}_SDRAM" />
   <parameter name="dataWidth" value="32" />
   <parameter name="generateSimulationModel" value="true" />
   <parameter name="initNOPDelay" value="0.0" />
@@ -1485,13 +1485,13 @@
   <parameter name="AUTO_GENERATION_ID" value="0" />
   <parameter name="AUTO_PIXEL_DMA_MASTER_ADDRESS_MAP"><![CDATA[<address-map><slave name='SDRAM.s1' start='0x0' end='0x8000000' /><slave name='SRAM.avalon_sram_slave' start='0x8000000' end='0x8200000' /></address-map>]]></parameter>
   <parameter name="AUTO_PIXEL_DMA_MASTER_ADDRESS_WIDTH" value="AddressWidth = 28" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="12" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="11" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="12" />
-  <parameter name="AUTO_UNIQUE_ID">Computer_System_VGA_Subsystem</parameter>
-  <parameter name="AUTO_VGA_CLK_CLOCK_DOMAIN" value="14" />
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="11" />
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_VGA_Subsystem</parameter>
+  <parameter name="AUTO_VGA_CLK_CLOCK_DOMAIN" value="13" />
   <parameter name="AUTO_VGA_CLK_CLOCK_RATE" value="25000000" />
-  <parameter name="AUTO_VGA_CLK_RESET_DOMAIN" value="14" />
+  <parameter name="AUTO_VGA_CLK_RESET_DOMAIN" value="13" />
  </module>
  <module
    name="Video_In_Subsystem"
@@ -1502,10 +1502,10 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="12" />
+  <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="11" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="12" />
-  <parameter name="AUTO_UNIQUE_ID">Computer_System_Video_In_Subsystem</parameter>
+  <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="11" />
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_Video_In_Subsystem</parameter>
   <parameter name="AUTO_VIDEO_IN_DMA_MASTER_ADDRESS_MAP"><![CDATA[<address-map><slave name='SDRAM.s1' start='0x0' end='0x8000000' /><slave name='SRAM.avalon_sram_slave' start='0x8000000' end='0x8200000' /></address-map>]]></parameter>
   <parameter
      name="AUTO_VIDEO_IN_DMA_MASTER_ADDRESS_WIDTH"
