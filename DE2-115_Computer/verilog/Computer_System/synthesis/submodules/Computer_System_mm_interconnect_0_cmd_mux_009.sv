@@ -44,8 +44,8 @@
 //   ARBITRATION_SCHEME   "round-robin"
 //   PIPELINE_ARB:        1
 //   PKT_TRANS_LOCK:      54 (arbitration locking enabled)
-//   ST_DATA_W:           94
-//   ST_CHANNEL_W:        31
+//   ST_DATA_W:           101
+//   ST_CHANNEL_W:        32
 // ------------------------------------------
 
 module Computer_System_mm_interconnect_0_cmd_mux_009
@@ -54,36 +54,36 @@ module Computer_System_mm_interconnect_0_cmd_mux_009
     // Sinks
     // ----------------------
     input                       sink0_valid,
-    input [94-1   : 0]  sink0_data,
-    input [31-1: 0]  sink0_channel,
+    input [101-1   : 0]  sink0_data,
+    input [32-1: 0]  sink0_channel,
     input                       sink0_startofpacket,
     input                       sink0_endofpacket,
     output                      sink0_ready,
 
     input                       sink1_valid,
-    input [94-1   : 0]  sink1_data,
-    input [31-1: 0]  sink1_channel,
+    input [101-1   : 0]  sink1_data,
+    input [32-1: 0]  sink1_channel,
     input                       sink1_startofpacket,
     input                       sink1_endofpacket,
     output                      sink1_ready,
 
     input                       sink2_valid,
-    input [94-1   : 0]  sink2_data,
-    input [31-1: 0]  sink2_channel,
+    input [101-1   : 0]  sink2_data,
+    input [32-1: 0]  sink2_channel,
     input                       sink2_startofpacket,
     input                       sink2_endofpacket,
     output                      sink2_ready,
 
     input                       sink3_valid,
-    input [94-1   : 0]  sink3_data,
-    input [31-1: 0]  sink3_channel,
+    input [101-1   : 0]  sink3_data,
+    input [32-1: 0]  sink3_channel,
     input                       sink3_startofpacket,
     input                       sink3_endofpacket,
     output                      sink3_ready,
 
     input                       sink4_valid,
-    input [94-1   : 0]  sink4_data,
-    input [31-1: 0]  sink4_channel,
+    input [101-1   : 0]  sink4_data,
+    input [32-1: 0]  sink4_channel,
     input                       sink4_startofpacket,
     input                       sink4_endofpacket,
     output                      sink4_ready,
@@ -93,8 +93,8 @@ module Computer_System_mm_interconnect_0_cmd_mux_009
     // Source
     // ----------------------
     output                      src_valid,
-    output [94-1    : 0] src_data,
-    output [31-1 : 0] src_channel,
+    output [101-1    : 0] src_data,
+    output [32-1 : 0] src_channel,
     output                      src_startofpacket,
     output                      src_endofpacket,
     input                       src_ready,
@@ -105,12 +105,12 @@ module Computer_System_mm_interconnect_0_cmd_mux_009
     input clk,
     input reset
 );
-    localparam PAYLOAD_W        = 94 + 31 + 2;
+    localparam PAYLOAD_W        = 101 + 32 + 2;
     localparam NUM_INPUTS       = 5;
     localparam SHARE_COUNTER_W  = 1;
     localparam PIPELINE_ARB     = 1;
-    localparam ST_DATA_W        = 94;
-    localparam ST_CHANNEL_W     = 31;
+    localparam ST_DATA_W        = 101;
+    localparam ST_CHANNEL_W     = 32;
     localparam PKT_TRANS_LOCK   = 54;
 
     // ------------------------------------------

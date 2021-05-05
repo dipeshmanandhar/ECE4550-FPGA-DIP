@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags=""
+   categories="System" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element alt_vip_cpr_0
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+      datum megawizard_uipreferences
+      {
+         value = "{}";
+         type = "String";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element alt_vip_cti_0
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element alt_vip_vfb_0
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+      datum megawizard_uipreferences
+      {
+         value = "{}";
+         type = "String";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element clk_sys
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+   element d5m_config
+   {
+      datum _sortIndex
+      {
+         value = "4";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="AUTO" />
+ <parameter name="device" value="5CGXFC5C6F27C7" />
+ <parameter name="deviceFamily" value="Cyclone V" />
+ <parameter name="deviceSpeedGrade" value="7_H6" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="4" />
+ <parameter name="projectName">C5G_LPDDR2_Nios_Test.qpf</parameter>
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface
+   name="alt_vip_cti_0_clocked_video"
+   internal="alt_vip_cti_0.clocked_video"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="alt_vip_vfb_0_dout"
+   internal="alt_vip_vfb_0.dout"
+   type="avalon_streaming"
+   dir="start" />
+ <interface name="clk" internal="clk_sys.clk_in" type="clock" dir="end" />
+ <interface
+   name="d5m_config_avalon_av_config_slave"
+   internal="d5m_config.avalon_av_config_slave"
+   type="avalon"
+   dir="end" />
+ <interface name="d5m_config_clock" internal="d5m_config.clock_reset" />
+ <interface name="d5m_config_clock_reset" internal="d5m_config.clock_reset_reset" />
+ <interface
+   name="d5m_config_external_interface"
+   internal="d5m_config.external_interface"
+   type="conduit"
+   dir="end" />
+ <interface name="reset" internal="clk_sys.clk_in_reset" type="reset" dir="end" />
+ <interface
+   name="to_ram_rd"
+   internal="alt_vip_vfb_0.read_master"
+   type="avalon"
+   dir="start" />
+ <interface
+   name="to_ram_wr"
+   internal="alt_vip_vfb_0.write_master"
+   type="avalon"
+   dir="start" />
+ <module name="alt_vip_cpr_0" kind="alt_vip_cpr" version="13.1" enabled="1">
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="DIN0_SYMBOLS_PER_BEAT" value="3" />
+  <parameter name="DIN1_ENABLED" value="0" />
+  <parameter name="DIN1_SYMBOLS_PER_BEAT" value="0" />
+  <parameter name="DOUT0_SYMBOLS_PER_BEAT" value="3" />
+  <parameter name="DOUT1_ENABLED" value="0" />
+  <parameter name="DOUT1_SYMBOLS_PER_BEAT" value="0" />
+  <parameter name="PARAMETERISATION"><![CDATA[<colourPatternRearrangerParams><CPR_NAME>Color Plane Sequencer</CPR_NAME><CPR_BPS>8</CPR_BPS><CPR_PORTS><INPUT_PORT><NAME>din0</NAME><STREAMING_DESCRIPTOR>[B:G:R]</STREAMING_DESCRIPTOR><ENABLED>true</ENABLED></INPUT_PORT><INPUT_PORT><NAME>din1</NAME><STREAMING_DESCRIPTOR>[Channel]</STREAMING_DESCRIPTOR><ENABLED>false</ENABLED></INPUT_PORT><OUTPUT_PORT><NAME>dout0</NAME><STREAMING_DESCRIPTOR>[B:G:R]</STREAMING_DESCRIPTOR><ENABLED>true</ENABLED><NON_IMAGE_PACKET_SOURCE>din0</NON_IMAGE_PACKET_SOURCE><HALVE_WIDTH>false</HALVE_WIDTH></OUTPUT_PORT><OUTPUT_PORT><NAME>dout1</NAME><STREAMING_DESCRIPTOR>[Channel]</STREAMING_DESCRIPTOR><ENABLED>false</ENABLED><NON_IMAGE_PACKET_SOURCE>din0</NON_IMAGE_PACKET_SOURCE><HALVE_WIDTH>false</HALVE_WIDTH></OUTPUT_PORT></CPR_PORTS><CPR_INPUT_2_PIXELS>false</CPR_INPUT_2_PIXELS></colourPatternRearrangerParams>]]></parameter>
+ </module>
+ <module name="alt_vip_cti_0" kind="alt_vip_cti" version="14.0" enabled="1">
+  <parameter name="ACCEPT_COLOURS_IN_SEQ" value="0" />
+  <parameter name="ADD_DATA_ENABLE_SIGNAL" value="0" />
+  <parameter name="BPS" value="8" />
+  <parameter name="CLOCKS_ARE_SAME" value="0" />
+  <parameter name="COLOUR_PLANES_ARE_IN_PARALLEL" value="1" />
+  <parameter name="FAMILY" value="Cyclone V" />
+  <parameter name="FIFO_DEPTH" value="1920" />
+  <parameter name="GENERATE_ANC" value="0" />
+  <parameter name="GENERATE_SYNC" value="0" />
+  <parameter name="H_ACTIVE_PIXELS_F0" value="1920" />
+  <parameter name="INTERLACED" value="0" />
+  <parameter name="NUMBER_OF_COLOUR_PLANES" value="3" />
+  <parameter name="STD_WIDTH" value="1" />
+  <parameter name="SYNC_TO" value="2" />
+  <parameter name="USE_CONTROL" value="0" />
+  <parameter name="USE_EMBEDDED_SYNCS" value="0" />
+  <parameter name="USE_STD" value="0" />
+  <parameter name="V_ACTIVE_LINES_F0" value="1080" />
+  <parameter name="V_ACTIVE_LINES_F1" value="32" />
+ </module>
+ <module name="alt_vip_vfb_0" kind="alt_vip_vfb" version="13.1" enabled="1">
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="PARAMETERISATION"><![CDATA[<frameBufferParams><VFB_NAME>MyFrameBuffer</VFB_NAME><VFB_MAX_WIDTH>1920</VFB_MAX_WIDTH><VFB_MAX_HEIGHT>1080</VFB_MAX_HEIGHT><VFB_BPS>8</VFB_BPS><VFB_CHANNELS_IN_SEQ>1</VFB_CHANNELS_IN_SEQ><VFB_CHANNELS_IN_PAR>3</VFB_CHANNELS_IN_PAR><VFB_WRITER_RUNTIME_CONTROL>0</VFB_WRITER_RUNTIME_CONTROL><VFB_DROP_FRAMES>true</VFB_DROP_FRAMES><VFB_READER_RUNTIME_CONTROL>0</VFB_READER_RUNTIME_CONTROL><VFB_REPEAT_FRAMES>true</VFB_REPEAT_FRAMES><VFB_FRAMEBUFFERS_ADDR>00000000</VFB_FRAMEBUFFERS_ADDR><VFB_MEM_PORT_WIDTH>128</VFB_MEM_PORT_WIDTH><VFB_MEM_MASTERS_USE_SEPARATE_CLOCK>0</VFB_MEM_MASTERS_USE_SEPARATE_CLOCK><VFB_RDATA_FIFO_DEPTH>1024</VFB_RDATA_FIFO_DEPTH><VFB_RDATA_BURST_TARGET>32</VFB_RDATA_BURST_TARGET><VFB_WDATA_FIFO_DEPTH>1024</VFB_WDATA_FIFO_DEPTH><VFB_WDATA_BURST_TARGET>8</VFB_WDATA_BURST_TARGET><VFB_MAX_NUMBER_PACKETS>1</VFB_MAX_NUMBER_PACKETS><VFB_MAX_SYMBOLS_IN_PACKET>10</VFB_MAX_SYMBOLS_IN_PACKET><VFB_INTERLACED_SUPPORT>0</VFB_INTERLACED_SUPPORT><VFB_CONTROLLED_DROP_REPEAT>0</VFB_CONTROLLED_DROP_REPEAT><VFB_BURST_ALIGNMENT>true</VFB_BURST_ALIGNMENT><VFB_DROP_INVALID_FIELDS>true</VFB_DROP_INVALID_FIELDS></frameBufferParams>]]></parameter>
+ </module>
+ <module name="clk_sys" kind="clock_source" version="18.1" enabled="1">
+  <parameter name="clockFrequency" value="100000000" />
+  <parameter name="clockFrequencyKnown" value="false" />
+  <parameter name="inputClockFrequency" value="0" />
+  <parameter name="resetSynchronousEdges" value="DEASSERT" />
+ </module>
+ <module
+   name="d5m_config"
+   kind="altera_up_avalon_audio_and_video_config"
+   version="18.0"
+   enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="audio_in" value="Microphone to ADC" />
+  <parameter name="bit_length" value="24" />
+  <parameter name="board" value="DE1-SoC" />
+  <parameter name="d5m_resolution" value="1920 x 1080" />
+  <parameter name="dac_enable" value="true" />
+  <parameter name="data_format" value="Left Justified" />
+  <parameter name="device">5 Megapixel Camera (TRDB_D5M)</parameter>
+  <parameter name="eai" value="true" />
+  <parameter name="exposure" value="false" />
+  <parameter name="line_in_bypass" value="false" />
+  <parameter name="mic_attenuation" value="-6dB" />
+  <parameter name="mic_bypass" value="false" />
+  <parameter name="sampling_rate" value="48 kHz" />
+  <parameter name="video_format" value="NTSC" />
+ </module>
+ <connection
+   kind="avalon_streaming"
+   version="18.1"
+   start="alt_vip_cti_0.dout"
+   end="alt_vip_cpr_0.din0" />
+ <connection
+   kind="avalon_streaming"
+   version="18.1"
+   start="alt_vip_cpr_0.dout0"
+   end="alt_vip_vfb_0.din" />
+ <connection kind="clock" version="18.1" start="clk_sys.clk" end="d5m_config.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clk_sys.clk"
+   end="alt_vip_cpr_0.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clk_sys.clk"
+   end="alt_vip_vfb_0.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clk_sys.clk"
+   end="alt_vip_cti_0.is_clk_rst" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_sys.clk_reset"
+   end="alt_vip_cti_0.is_clk_rst_reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_sys.clk_reset"
+   end="alt_vip_cpr_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_sys.clk_reset"
+   end="alt_vip_vfb_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_sys.clk_reset"
+   end="d5m_config.reset" />
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="AUTO" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="4" />
+</system>

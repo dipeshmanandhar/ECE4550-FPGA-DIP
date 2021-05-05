@@ -91,301 +91,319 @@ module Computer_System (
 		input  wire        video_pll_ref_reset_reset   //  video_pll_ref_reset.reset
 	);
 
-	wire         system_pll_sys_clk_clk;                                                                // System_PLL:sys_clk_clk -> [AV_Config:clk, Audio_Subsystem:sys_clk_clk, Char_LCD_16x2:clk, Expansion_JP5:clk, Flash:i_clock, Green_LEDs:clk, HEX3_HEX0:clk, HEX7_HEX4:clk, Interval_Timer:clk, Interval_Timer_2:clk, IrDA:clk, JTAG_UART:clk, JTAG_to_FPGA_Bridge:clk_clk, Nios2:clk, PS2_Port:clk, PS2_Port_Dual:clk, Pushbuttons:clk, Red_LEDs:clk, SDRAM:clk, SD_Card:i_clock, SRAM:clk, Serial_Port:clk, Slider_Switches:clk, SysID:clock, USB:clk, VGA_Subsystem:sys_clk_clk, Video_In_Subsystem:sys_clk_clk, irq_mapper:clk, mm_interconnect_0:System_PLL_sys_clk_clk, rst_controller:clk, rst_controller_001:clk]
-	wire         video_pll_vga_clk_clk;                                                                 // Video_PLL:vga_clk_clk -> VGA_Subsystem:vga_clk_clk
-	wire         system_pll_reset_source_reset;                                                         // System_PLL:reset_source_reset -> [Audio_Subsystem:sys_reset_reset_n, JTAG_to_FPGA_Bridge:clk_reset_reset, VGA_Subsystem:sys_reset_reset_n, Video_In_Subsystem:sys_reset_reset_n, rst_controller:reset_in0, rst_controller_001:reset_in1]
-	wire         video_pll_reset_source_reset;                                                          // Video_PLL:reset_source_reset -> VGA_Subsystem:vga_reset_reset_n
-	wire  [31:0] nios2_custom_instruction_master_multi_dataa;                                           // Nios2:A_ci_multi_dataa -> Nios2_custom_instruction_master_translator:ci_slave_multi_dataa
-	wire         nios2_custom_instruction_master_multi_writerc;                                         // Nios2:A_ci_multi_writerc -> Nios2_custom_instruction_master_translator:ci_slave_multi_writerc
-	wire  [31:0] nios2_custom_instruction_master_multi_result;                                          // Nios2_custom_instruction_master_translator:ci_slave_multi_result -> Nios2:A_ci_multi_result
-	wire         nios2_custom_instruction_master_clk;                                                   // Nios2:A_ci_multi_clock -> Nios2_custom_instruction_master_translator:ci_slave_multi_clk
-	wire  [31:0] nios2_custom_instruction_master_multi_datab;                                           // Nios2:A_ci_multi_datab -> Nios2_custom_instruction_master_translator:ci_slave_multi_datab
-	wire         nios2_custom_instruction_master_start;                                                 // Nios2:A_ci_multi_start -> Nios2_custom_instruction_master_translator:ci_slave_multi_start
-	wire   [4:0] nios2_custom_instruction_master_multi_b;                                               // Nios2:A_ci_multi_b -> Nios2_custom_instruction_master_translator:ci_slave_multi_b
-	wire   [4:0] nios2_custom_instruction_master_multi_c;                                               // Nios2:A_ci_multi_c -> Nios2_custom_instruction_master_translator:ci_slave_multi_c
-	wire         nios2_custom_instruction_master_reset_req;                                             // Nios2:A_ci_multi_reset_req -> Nios2_custom_instruction_master_translator:ci_slave_multi_reset_req
-	wire         nios2_custom_instruction_master_done;                                                  // Nios2_custom_instruction_master_translator:ci_slave_multi_done -> Nios2:A_ci_multi_done
-	wire   [4:0] nios2_custom_instruction_master_multi_a;                                               // Nios2:A_ci_multi_a -> Nios2_custom_instruction_master_translator:ci_slave_multi_a
-	wire         nios2_custom_instruction_master_clk_en;                                                // Nios2:A_ci_multi_clk_en -> Nios2_custom_instruction_master_translator:ci_slave_multi_clken
-	wire         nios2_custom_instruction_master_reset;                                                 // Nios2:A_ci_multi_reset -> Nios2_custom_instruction_master_translator:ci_slave_multi_reset
-	wire         nios2_custom_instruction_master_multi_readrb;                                          // Nios2:A_ci_multi_readrb -> Nios2_custom_instruction_master_translator:ci_slave_multi_readrb
-	wire         nios2_custom_instruction_master_multi_readra;                                          // Nios2:A_ci_multi_readra -> Nios2_custom_instruction_master_translator:ci_slave_multi_readra
-	wire   [7:0] nios2_custom_instruction_master_multi_n;                                               // Nios2:A_ci_multi_n -> Nios2_custom_instruction_master_translator:ci_slave_multi_n
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_readra;                     // Nios2_custom_instruction_master_translator:multi_ci_master_readra -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_readra
-	wire   [4:0] nios2_custom_instruction_master_translator_multi_ci_master_a;                          // Nios2_custom_instruction_master_translator:multi_ci_master_a -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_a
-	wire   [4:0] nios2_custom_instruction_master_translator_multi_ci_master_b;                          // Nios2_custom_instruction_master_translator:multi_ci_master_b -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_b
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_clk;                        // Nios2_custom_instruction_master_translator:multi_ci_master_clk -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_clk
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_readrb;                     // Nios2_custom_instruction_master_translator:multi_ci_master_readrb -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_readrb
-	wire   [4:0] nios2_custom_instruction_master_translator_multi_ci_master_c;                          // Nios2_custom_instruction_master_translator:multi_ci_master_c -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_c
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_start;                      // Nios2_custom_instruction_master_translator:multi_ci_master_start -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_start
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_reset_req;                  // Nios2_custom_instruction_master_translator:multi_ci_master_reset_req -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_reset_req
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_done;                       // Nios2_custom_instruction_master_multi_xconnect:ci_slave_done -> Nios2_custom_instruction_master_translator:multi_ci_master_done
-	wire   [7:0] nios2_custom_instruction_master_translator_multi_ci_master_n;                          // Nios2_custom_instruction_master_translator:multi_ci_master_n -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_n
-	wire  [31:0] nios2_custom_instruction_master_translator_multi_ci_master_result;                     // Nios2_custom_instruction_master_multi_xconnect:ci_slave_result -> Nios2_custom_instruction_master_translator:multi_ci_master_result
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_clk_en;                     // Nios2_custom_instruction_master_translator:multi_ci_master_clken -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_clken
-	wire  [31:0] nios2_custom_instruction_master_translator_multi_ci_master_datab;                      // Nios2_custom_instruction_master_translator:multi_ci_master_datab -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_datab
-	wire  [31:0] nios2_custom_instruction_master_translator_multi_ci_master_dataa;                      // Nios2_custom_instruction_master_translator:multi_ci_master_dataa -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_dataa
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_reset;                      // Nios2_custom_instruction_master_translator:multi_ci_master_reset -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_reset
-	wire         nios2_custom_instruction_master_translator_multi_ci_master_writerc;                    // Nios2_custom_instruction_master_translator:multi_ci_master_writerc -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_writerc
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_readra;                      // Nios2_custom_instruction_master_multi_xconnect:ci_master0_readra -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_readra
-	wire   [4:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_a;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_a -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_a
-	wire   [4:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_b;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_b -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_b
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_readrb;                      // Nios2_custom_instruction_master_multi_xconnect:ci_master0_readrb -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_readrb
-	wire   [4:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_c;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_c -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_c
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_clk;                         // Nios2_custom_instruction_master_multi_xconnect:ci_master0_clk -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_clk
-	wire  [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_ipending;                    // Nios2_custom_instruction_master_multi_xconnect:ci_master0_ipending -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_ipending
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_start;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_start -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_start
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_reset_req;                   // Nios2_custom_instruction_master_multi_xconnect:ci_master0_reset_req -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_reset_req
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_done;                        // Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_done -> Nios2_custom_instruction_master_multi_xconnect:ci_master0_done
-	wire   [7:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_n;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_n -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_n
-	wire  [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_result;                      // Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_result -> Nios2_custom_instruction_master_multi_xconnect:ci_master0_result
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_estatus;                     // Nios2_custom_instruction_master_multi_xconnect:ci_master0_estatus -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_estatus
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_clk_en;                      // Nios2_custom_instruction_master_multi_xconnect:ci_master0_clken -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_clken
-	wire  [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_datab;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_datab -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_datab
-	wire  [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_dataa;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_dataa -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_dataa
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_reset;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_reset -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_reset
-	wire         nios2_custom_instruction_master_multi_xconnect_ci_master0_writerc;                     // Nios2_custom_instruction_master_multi_xconnect:ci_master0_writerc -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_writerc
-	wire  [31:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_result;              // Nios2_Floating_Point:result -> Nios2_custom_instruction_master_multi_slave_translator0:ci_master_result
-	wire         nios2_custom_instruction_master_multi_slave_translator0_ci_master_clk;                 // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_clk -> Nios2_Floating_Point:clk
-	wire         nios2_custom_instruction_master_multi_slave_translator0_ci_master_clk_en;              // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_clken -> Nios2_Floating_Point:clk_en
-	wire  [31:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_datab;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_datab -> Nios2_Floating_Point:datab
-	wire  [31:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_dataa;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_dataa -> Nios2_Floating_Point:dataa
-	wire         nios2_custom_instruction_master_multi_slave_translator0_ci_master_start;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_start -> Nios2_Floating_Point:start
-	wire         nios2_custom_instruction_master_multi_slave_translator0_ci_master_reset;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_reset -> Nios2_Floating_Point:reset
-	wire         nios2_custom_instruction_master_multi_slave_translator0_ci_master_done;                // Nios2_Floating_Point:done -> Nios2_custom_instruction_master_multi_slave_translator0:ci_master_done
-	wire   [1:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_n;                   // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_n -> Nios2_Floating_Point:n
-	wire  [31:0] nios2_data_master_readdata;                                                            // mm_interconnect_0:Nios2_data_master_readdata -> Nios2:d_readdata
-	wire         nios2_data_master_waitrequest;                                                         // mm_interconnect_0:Nios2_data_master_waitrequest -> Nios2:d_waitrequest
-	wire         nios2_data_master_debugaccess;                                                         // Nios2:debug_mem_slave_debugaccess_to_roms -> mm_interconnect_0:Nios2_data_master_debugaccess
-	wire  [31:0] nios2_data_master_address;                                                             // Nios2:d_address -> mm_interconnect_0:Nios2_data_master_address
-	wire   [3:0] nios2_data_master_byteenable;                                                          // Nios2:d_byteenable -> mm_interconnect_0:Nios2_data_master_byteenable
-	wire         nios2_data_master_read;                                                                // Nios2:d_read -> mm_interconnect_0:Nios2_data_master_read
-	wire         nios2_data_master_write;                                                               // Nios2:d_write -> mm_interconnect_0:Nios2_data_master_write
-	wire  [31:0] nios2_data_master_writedata;                                                           // Nios2:d_writedata -> mm_interconnect_0:Nios2_data_master_writedata
-	wire  [31:0] jtag_to_fpga_bridge_master_readdata;                                                   // mm_interconnect_0:JTAG_to_FPGA_Bridge_master_readdata -> JTAG_to_FPGA_Bridge:master_readdata
-	wire         jtag_to_fpga_bridge_master_waitrequest;                                                // mm_interconnect_0:JTAG_to_FPGA_Bridge_master_waitrequest -> JTAG_to_FPGA_Bridge:master_waitrequest
-	wire  [31:0] jtag_to_fpga_bridge_master_address;                                                    // JTAG_to_FPGA_Bridge:master_address -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_address
-	wire         jtag_to_fpga_bridge_master_read;                                                       // JTAG_to_FPGA_Bridge:master_read -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_read
-	wire   [3:0] jtag_to_fpga_bridge_master_byteenable;                                                 // JTAG_to_FPGA_Bridge:master_byteenable -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_byteenable
-	wire         jtag_to_fpga_bridge_master_readdatavalid;                                              // mm_interconnect_0:JTAG_to_FPGA_Bridge_master_readdatavalid -> JTAG_to_FPGA_Bridge:master_readdatavalid
-	wire         jtag_to_fpga_bridge_master_write;                                                      // JTAG_to_FPGA_Bridge:master_write -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_write
-	wire  [31:0] jtag_to_fpga_bridge_master_writedata;                                                  // JTAG_to_FPGA_Bridge:master_writedata -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_writedata
-	wire  [31:0] nios2_instruction_master_readdata;                                                     // mm_interconnect_0:Nios2_instruction_master_readdata -> Nios2:i_readdata
-	wire         nios2_instruction_master_waitrequest;                                                  // mm_interconnect_0:Nios2_instruction_master_waitrequest -> Nios2:i_waitrequest
-	wire  [27:0] nios2_instruction_master_address;                                                      // Nios2:i_address -> mm_interconnect_0:Nios2_instruction_master_address
-	wire         nios2_instruction_master_read;                                                         // Nios2:i_read -> mm_interconnect_0:Nios2_instruction_master_read
-	wire         nios2_instruction_master_readdatavalid;                                                // mm_interconnect_0:Nios2_instruction_master_readdatavalid -> Nios2:i_readdatavalid
-	wire         vga_subsystem_pixel_dma_master_waitrequest;                                            // mm_interconnect_0:VGA_Subsystem_pixel_dma_master_waitrequest -> VGA_Subsystem:pixel_dma_master_waitrequest
-	wire  [15:0] vga_subsystem_pixel_dma_master_readdata;                                               // mm_interconnect_0:VGA_Subsystem_pixel_dma_master_readdata -> VGA_Subsystem:pixel_dma_master_readdata
-	wire  [31:0] vga_subsystem_pixel_dma_master_address;                                                // VGA_Subsystem:pixel_dma_master_address -> mm_interconnect_0:VGA_Subsystem_pixel_dma_master_address
-	wire         vga_subsystem_pixel_dma_master_read;                                                   // VGA_Subsystem:pixel_dma_master_read -> mm_interconnect_0:VGA_Subsystem_pixel_dma_master_read
-	wire         vga_subsystem_pixel_dma_master_readdatavalid;                                          // mm_interconnect_0:VGA_Subsystem_pixel_dma_master_readdatavalid -> VGA_Subsystem:pixel_dma_master_readdatavalid
-	wire         vga_subsystem_pixel_dma_master_lock;                                                   // VGA_Subsystem:pixel_dma_master_lock -> mm_interconnect_0:VGA_Subsystem_pixel_dma_master_lock
-	wire         video_in_subsystem_video_in_dma_master_waitrequest;                                    // mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_waitrequest -> Video_In_Subsystem:video_in_dma_master_waitrequest
-	wire  [31:0] video_in_subsystem_video_in_dma_master_address;                                        // Video_In_Subsystem:video_in_dma_master_address -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_address
-	wire         video_in_subsystem_video_in_dma_master_write;                                          // Video_In_Subsystem:video_in_dma_master_write -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_write
-	wire  [15:0] video_in_subsystem_video_in_dma_master_writedata;                                      // Video_In_Subsystem:video_in_dma_master_writedata -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_writedata
-	wire         mm_interconnect_0_audio_subsystem_audio_slave_chipselect;                              // mm_interconnect_0:Audio_Subsystem_audio_slave_chipselect -> Audio_Subsystem:audio_slave_chipselect
-	wire  [31:0] mm_interconnect_0_audio_subsystem_audio_slave_readdata;                                // Audio_Subsystem:audio_slave_readdata -> mm_interconnect_0:Audio_Subsystem_audio_slave_readdata
-	wire   [1:0] mm_interconnect_0_audio_subsystem_audio_slave_address;                                 // mm_interconnect_0:Audio_Subsystem_audio_slave_address -> Audio_Subsystem:audio_slave_address
-	wire         mm_interconnect_0_audio_subsystem_audio_slave_read;                                    // mm_interconnect_0:Audio_Subsystem_audio_slave_read -> Audio_Subsystem:audio_slave_read
-	wire         mm_interconnect_0_audio_subsystem_audio_slave_write;                                   // mm_interconnect_0:Audio_Subsystem_audio_slave_write -> Audio_Subsystem:audio_slave_write
-	wire  [31:0] mm_interconnect_0_audio_subsystem_audio_slave_writedata;                               // mm_interconnect_0:Audio_Subsystem_audio_slave_writedata -> Audio_Subsystem:audio_slave_writedata
-	wire  [31:0] mm_interconnect_0_av_config_avalon_av_config_slave_readdata;                           // AV_Config:readdata -> mm_interconnect_0:AV_Config_avalon_av_config_slave_readdata
-	wire         mm_interconnect_0_av_config_avalon_av_config_slave_waitrequest;                        // AV_Config:waitrequest -> mm_interconnect_0:AV_Config_avalon_av_config_slave_waitrequest
-	wire   [1:0] mm_interconnect_0_av_config_avalon_av_config_slave_address;                            // mm_interconnect_0:AV_Config_avalon_av_config_slave_address -> AV_Config:address
-	wire         mm_interconnect_0_av_config_avalon_av_config_slave_read;                               // mm_interconnect_0:AV_Config_avalon_av_config_slave_read -> AV_Config:read
-	wire   [3:0] mm_interconnect_0_av_config_avalon_av_config_slave_byteenable;                         // mm_interconnect_0:AV_Config_avalon_av_config_slave_byteenable -> AV_Config:byteenable
-	wire         mm_interconnect_0_av_config_avalon_av_config_slave_write;                              // mm_interconnect_0:AV_Config_avalon_av_config_slave_write -> AV_Config:write
-	wire  [31:0] mm_interconnect_0_av_config_avalon_av_config_slave_writedata;                          // mm_interconnect_0:AV_Config_avalon_av_config_slave_writedata -> AV_Config:writedata
-	wire         mm_interconnect_0_irda_avalon_irda_slave_chipselect;                                   // mm_interconnect_0:IrDA_avalon_irda_slave_chipselect -> IrDA:chipselect
-	wire  [31:0] mm_interconnect_0_irda_avalon_irda_slave_readdata;                                     // IrDA:readdata -> mm_interconnect_0:IrDA_avalon_irda_slave_readdata
-	wire   [0:0] mm_interconnect_0_irda_avalon_irda_slave_address;                                      // mm_interconnect_0:IrDA_avalon_irda_slave_address -> IrDA:address
-	wire         mm_interconnect_0_irda_avalon_irda_slave_read;                                         // mm_interconnect_0:IrDA_avalon_irda_slave_read -> IrDA:read
-	wire   [3:0] mm_interconnect_0_irda_avalon_irda_slave_byteenable;                                   // mm_interconnect_0:IrDA_avalon_irda_slave_byteenable -> IrDA:byteenable
-	wire         mm_interconnect_0_irda_avalon_irda_slave_write;                                        // mm_interconnect_0:IrDA_avalon_irda_slave_write -> IrDA:write
-	wire  [31:0] mm_interconnect_0_irda_avalon_irda_slave_writedata;                                    // mm_interconnect_0:IrDA_avalon_irda_slave_writedata -> IrDA:writedata
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect;                              // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_chipselect -> JTAG_UART:av_chipselect
-	wire  [31:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata;                                // JTAG_UART:av_readdata -> mm_interconnect_0:JTAG_UART_avalon_jtag_slave_readdata
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest;                             // JTAG_UART:av_waitrequest -> mm_interconnect_0:JTAG_UART_avalon_jtag_slave_waitrequest
-	wire   [0:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_address;                                 // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_address -> JTAG_UART:av_address
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_read;                                    // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_read -> JTAG_UART:av_read_n
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_write;                                   // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_write -> JTAG_UART:av_write_n
-	wire  [31:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata;                               // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_writedata -> JTAG_UART:av_writedata
-	wire         mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_chipselect;                           // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_chipselect -> Char_LCD_16x2:chipselect
-	wire   [7:0] mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_readdata;                             // Char_LCD_16x2:readdata -> mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_readdata
-	wire         mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_waitrequest;                          // Char_LCD_16x2:waitrequest -> mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_waitrequest
-	wire   [0:0] mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_address;                              // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_address -> Char_LCD_16x2:address
-	wire         mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_read;                                 // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_read -> Char_LCD_16x2:read
-	wire         mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_write;                                // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_write -> Char_LCD_16x2:write
-	wire   [7:0] mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_writedata;                            // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_writedata -> Char_LCD_16x2:writedata
-	wire         mm_interconnect_0_ps2_port_avalon_ps2_slave_chipselect;                                // mm_interconnect_0:PS2_Port_avalon_ps2_slave_chipselect -> PS2_Port:chipselect
-	wire  [31:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_readdata;                                  // PS2_Port:readdata -> mm_interconnect_0:PS2_Port_avalon_ps2_slave_readdata
-	wire         mm_interconnect_0_ps2_port_avalon_ps2_slave_waitrequest;                               // PS2_Port:waitrequest -> mm_interconnect_0:PS2_Port_avalon_ps2_slave_waitrequest
-	wire   [0:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_address;                                   // mm_interconnect_0:PS2_Port_avalon_ps2_slave_address -> PS2_Port:address
-	wire         mm_interconnect_0_ps2_port_avalon_ps2_slave_read;                                      // mm_interconnect_0:PS2_Port_avalon_ps2_slave_read -> PS2_Port:read
-	wire   [3:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_byteenable;                                // mm_interconnect_0:PS2_Port_avalon_ps2_slave_byteenable -> PS2_Port:byteenable
-	wire         mm_interconnect_0_ps2_port_avalon_ps2_slave_write;                                     // mm_interconnect_0:PS2_Port_avalon_ps2_slave_write -> PS2_Port:write
-	wire  [31:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_writedata;                                 // mm_interconnect_0:PS2_Port_avalon_ps2_slave_writedata -> PS2_Port:writedata
-	wire         mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_chipselect;                           // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_chipselect -> PS2_Port_Dual:chipselect
-	wire  [31:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_readdata;                             // PS2_Port_Dual:readdata -> mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_readdata
-	wire         mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_waitrequest;                          // PS2_Port_Dual:waitrequest -> mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_waitrequest
-	wire   [0:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_address;                              // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_address -> PS2_Port_Dual:address
-	wire         mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_read;                                 // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_read -> PS2_Port_Dual:read
-	wire   [3:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_byteenable;                           // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_byteenable -> PS2_Port_Dual:byteenable
-	wire         mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_write;                                // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_write -> PS2_Port_Dual:write
-	wire  [31:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_writedata;                            // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_writedata -> PS2_Port_Dual:writedata
-	wire         mm_interconnect_0_serial_port_avalon_rs232_slave_chipselect;                           // mm_interconnect_0:Serial_Port_avalon_rs232_slave_chipselect -> Serial_Port:chipselect
-	wire  [31:0] mm_interconnect_0_serial_port_avalon_rs232_slave_readdata;                             // Serial_Port:readdata -> mm_interconnect_0:Serial_Port_avalon_rs232_slave_readdata
-	wire   [0:0] mm_interconnect_0_serial_port_avalon_rs232_slave_address;                              // mm_interconnect_0:Serial_Port_avalon_rs232_slave_address -> Serial_Port:address
-	wire         mm_interconnect_0_serial_port_avalon_rs232_slave_read;                                 // mm_interconnect_0:Serial_Port_avalon_rs232_slave_read -> Serial_Port:read
-	wire   [3:0] mm_interconnect_0_serial_port_avalon_rs232_slave_byteenable;                           // mm_interconnect_0:Serial_Port_avalon_rs232_slave_byteenable -> Serial_Port:byteenable
-	wire         mm_interconnect_0_serial_port_avalon_rs232_slave_write;                                // mm_interconnect_0:Serial_Port_avalon_rs232_slave_write -> Serial_Port:write
-	wire  [31:0] mm_interconnect_0_serial_port_avalon_rs232_slave_writedata;                            // mm_interconnect_0:Serial_Port_avalon_rs232_slave_writedata -> Serial_Port:writedata
-	wire         mm_interconnect_0_sd_card_avalon_sdcard_slave_chipselect;                              // mm_interconnect_0:SD_Card_avalon_sdcard_slave_chipselect -> SD_Card:i_avalon_chip_select
-	wire  [31:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_readdata;                                // SD_Card:o_avalon_readdata -> mm_interconnect_0:SD_Card_avalon_sdcard_slave_readdata
-	wire         mm_interconnect_0_sd_card_avalon_sdcard_slave_waitrequest;                             // SD_Card:o_avalon_waitrequest -> mm_interconnect_0:SD_Card_avalon_sdcard_slave_waitrequest
-	wire   [7:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_address;                                 // mm_interconnect_0:SD_Card_avalon_sdcard_slave_address -> SD_Card:i_avalon_address
-	wire         mm_interconnect_0_sd_card_avalon_sdcard_slave_read;                                    // mm_interconnect_0:SD_Card_avalon_sdcard_slave_read -> SD_Card:i_avalon_read
-	wire   [3:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_byteenable;                              // mm_interconnect_0:SD_Card_avalon_sdcard_slave_byteenable -> SD_Card:i_avalon_byteenable
-	wire         mm_interconnect_0_sd_card_avalon_sdcard_slave_write;                                   // mm_interconnect_0:SD_Card_avalon_sdcard_slave_write -> SD_Card:i_avalon_write
-	wire  [31:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_writedata;                               // mm_interconnect_0:SD_Card_avalon_sdcard_slave_writedata -> SD_Card:i_avalon_writedata
-	wire  [15:0] mm_interconnect_0_sram_avalon_sram_slave_readdata;                                     // SRAM:readdata -> mm_interconnect_0:SRAM_avalon_sram_slave_readdata
-	wire  [19:0] mm_interconnect_0_sram_avalon_sram_slave_address;                                      // mm_interconnect_0:SRAM_avalon_sram_slave_address -> SRAM:address
-	wire         mm_interconnect_0_sram_avalon_sram_slave_read;                                         // mm_interconnect_0:SRAM_avalon_sram_slave_read -> SRAM:read
-	wire   [1:0] mm_interconnect_0_sram_avalon_sram_slave_byteenable;                                   // mm_interconnect_0:SRAM_avalon_sram_slave_byteenable -> SRAM:byteenable
-	wire         mm_interconnect_0_sram_avalon_sram_slave_readdatavalid;                                // SRAM:readdatavalid -> mm_interconnect_0:SRAM_avalon_sram_slave_readdatavalid
-	wire         mm_interconnect_0_sram_avalon_sram_slave_write;                                        // mm_interconnect_0:SRAM_avalon_sram_slave_write -> SRAM:write
-	wire  [15:0] mm_interconnect_0_sram_avalon_sram_slave_writedata;                                    // mm_interconnect_0:SRAM_avalon_sram_slave_writedata -> SRAM:writedata
-	wire         mm_interconnect_0_usb_avalon_usb_slave_chipselect;                                     // mm_interconnect_0:USB_avalon_usb_slave_chipselect -> USB:chipselect
-	wire  [15:0] mm_interconnect_0_usb_avalon_usb_slave_readdata;                                       // USB:readdata -> mm_interconnect_0:USB_avalon_usb_slave_readdata
-	wire   [1:0] mm_interconnect_0_usb_avalon_usb_slave_address;                                        // mm_interconnect_0:USB_avalon_usb_slave_address -> USB:address
-	wire         mm_interconnect_0_usb_avalon_usb_slave_read;                                           // mm_interconnect_0:USB_avalon_usb_slave_read -> USB:read
-	wire         mm_interconnect_0_usb_avalon_usb_slave_write;                                          // mm_interconnect_0:USB_avalon_usb_slave_write -> USB:write
-	wire  [15:0] mm_interconnect_0_usb_avalon_usb_slave_writedata;                                      // mm_interconnect_0:USB_avalon_usb_slave_writedata -> USB:writedata
-	wire  [31:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_readdata;                    // VGA_Subsystem:char_buffer_control_slave_readdata -> mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_readdata
-	wire   [1:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_address;                     // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_address -> VGA_Subsystem:char_buffer_control_slave_address
-	wire         mm_interconnect_0_vga_subsystem_char_buffer_control_slave_read;                        // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_read -> VGA_Subsystem:char_buffer_control_slave_read
-	wire   [3:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_byteenable;                  // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_byteenable -> VGA_Subsystem:char_buffer_control_slave_byteenable
-	wire         mm_interconnect_0_vga_subsystem_char_buffer_control_slave_write;                       // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_write -> VGA_Subsystem:char_buffer_control_slave_write
-	wire  [31:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_writedata;                   // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_writedata -> VGA_Subsystem:char_buffer_control_slave_writedata
-	wire         mm_interconnect_0_vga_subsystem_char_buffer_slave_chipselect;                          // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_chipselect -> VGA_Subsystem:char_buffer_slave_chipselect
-	wire  [31:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_readdata;                            // VGA_Subsystem:char_buffer_slave_readdata -> mm_interconnect_0:VGA_Subsystem_char_buffer_slave_readdata
-	wire  [10:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_address;                             // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_address -> VGA_Subsystem:char_buffer_slave_address
-	wire   [3:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_byteenable;                          // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_byteenable -> VGA_Subsystem:char_buffer_slave_byteenable
-	wire         mm_interconnect_0_vga_subsystem_char_buffer_slave_write;                               // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_write -> VGA_Subsystem:char_buffer_slave_write
-	wire  [31:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_writedata;                           // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_writedata -> VGA_Subsystem:char_buffer_slave_writedata
-	wire         mm_interconnect_0_vga_subsystem_char_buffer_slave_clken;                               // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_clken -> VGA_Subsystem:char_buffer_slave_clken
-	wire  [31:0] mm_interconnect_0_sysid_control_slave_readdata;                                        // SysID:readdata -> mm_interconnect_0:SysID_control_slave_readdata
-	wire   [0:0] mm_interconnect_0_sysid_control_slave_address;                                         // mm_interconnect_0:SysID_control_slave_address -> SysID:address
-	wire  [31:0] mm_interconnect_0_nios2_debug_mem_slave_readdata;                                      // Nios2:debug_mem_slave_readdata -> mm_interconnect_0:Nios2_debug_mem_slave_readdata
-	wire         mm_interconnect_0_nios2_debug_mem_slave_waitrequest;                                   // Nios2:debug_mem_slave_waitrequest -> mm_interconnect_0:Nios2_debug_mem_slave_waitrequest
-	wire         mm_interconnect_0_nios2_debug_mem_slave_debugaccess;                                   // mm_interconnect_0:Nios2_debug_mem_slave_debugaccess -> Nios2:debug_mem_slave_debugaccess
-	wire   [8:0] mm_interconnect_0_nios2_debug_mem_slave_address;                                       // mm_interconnect_0:Nios2_debug_mem_slave_address -> Nios2:debug_mem_slave_address
-	wire         mm_interconnect_0_nios2_debug_mem_slave_read;                                          // mm_interconnect_0:Nios2_debug_mem_slave_read -> Nios2:debug_mem_slave_read
-	wire   [3:0] mm_interconnect_0_nios2_debug_mem_slave_byteenable;                                    // mm_interconnect_0:Nios2_debug_mem_slave_byteenable -> Nios2:debug_mem_slave_byteenable
-	wire         mm_interconnect_0_nios2_debug_mem_slave_write;                                         // mm_interconnect_0:Nios2_debug_mem_slave_write -> Nios2:debug_mem_slave_write
-	wire  [31:0] mm_interconnect_0_nios2_debug_mem_slave_writedata;                                     // mm_interconnect_0:Nios2_debug_mem_slave_writedata -> Nios2:debug_mem_slave_writedata
-	wire         mm_interconnect_0_flash_flash_data_chipselect;                                         // mm_interconnect_0:Flash_flash_data_chipselect -> Flash:i_avalon_chip_select
-	wire  [31:0] mm_interconnect_0_flash_flash_data_readdata;                                           // Flash:o_avalon_readdata -> mm_interconnect_0:Flash_flash_data_readdata
-	wire         mm_interconnect_0_flash_flash_data_waitrequest;                                        // Flash:o_avalon_waitrequest -> mm_interconnect_0:Flash_flash_data_waitrequest
-	wire  [20:0] mm_interconnect_0_flash_flash_data_address;                                            // mm_interconnect_0:Flash_flash_data_address -> Flash:i_avalon_address
-	wire         mm_interconnect_0_flash_flash_data_read;                                               // mm_interconnect_0:Flash_flash_data_read -> Flash:i_avalon_read
-	wire   [3:0] mm_interconnect_0_flash_flash_data_byteenable;                                         // mm_interconnect_0:Flash_flash_data_byteenable -> Flash:i_avalon_byteenable
-	wire         mm_interconnect_0_flash_flash_data_write;                                              // mm_interconnect_0:Flash_flash_data_write -> Flash:i_avalon_write
-	wire  [31:0] mm_interconnect_0_flash_flash_data_writedata;                                          // mm_interconnect_0:Flash_flash_data_writedata -> Flash:i_avalon_writedata
-	wire         mm_interconnect_0_flash_flash_erase_control_chipselect;                                // mm_interconnect_0:Flash_flash_erase_control_chipselect -> Flash:i_avalon_erase_chip_select
-	wire  [31:0] mm_interconnect_0_flash_flash_erase_control_readdata;                                  // Flash:o_avalon_erase_readdata -> mm_interconnect_0:Flash_flash_erase_control_readdata
-	wire         mm_interconnect_0_flash_flash_erase_control_waitrequest;                               // Flash:o_avalon_erase_waitrequest -> mm_interconnect_0:Flash_flash_erase_control_waitrequest
-	wire         mm_interconnect_0_flash_flash_erase_control_read;                                      // mm_interconnect_0:Flash_flash_erase_control_read -> Flash:i_avalon_erase_read
-	wire   [3:0] mm_interconnect_0_flash_flash_erase_control_byteenable;                                // mm_interconnect_0:Flash_flash_erase_control_byteenable -> Flash:i_avalon_erase_byteenable
-	wire         mm_interconnect_0_flash_flash_erase_control_write;                                     // mm_interconnect_0:Flash_flash_erase_control_write -> Flash:i_avalon_erase_write
-	wire  [31:0] mm_interconnect_0_flash_flash_erase_control_writedata;                                 // mm_interconnect_0:Flash_flash_erase_control_writedata -> Flash:i_avalon_erase_writedata
-	wire  [31:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_readdata;                      // VGA_Subsystem:pixel_dma_control_slave_readdata -> mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_readdata
-	wire   [1:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_address;                       // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_address -> VGA_Subsystem:pixel_dma_control_slave_address
-	wire         mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_read;                          // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_read -> VGA_Subsystem:pixel_dma_control_slave_read
-	wire   [3:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_byteenable;                    // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_byteenable -> VGA_Subsystem:pixel_dma_control_slave_byteenable
-	wire         mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_write;                         // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_write -> VGA_Subsystem:pixel_dma_control_slave_write
-	wire  [31:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_writedata;                     // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_writedata -> VGA_Subsystem:pixel_dma_control_slave_writedata
-	wire  [31:0] mm_interconnect_0_vga_subsystem_rgb_slave_readdata;                                    // VGA_Subsystem:rgb_slave_readdata -> mm_interconnect_0:VGA_Subsystem_rgb_slave_readdata
-	wire         mm_interconnect_0_vga_subsystem_rgb_slave_read;                                        // mm_interconnect_0:VGA_Subsystem_rgb_slave_read -> VGA_Subsystem:rgb_slave_read
-	wire         mm_interconnect_0_sdram_s1_chipselect;                                                 // mm_interconnect_0:SDRAM_s1_chipselect -> SDRAM:az_cs
-	wire  [31:0] mm_interconnect_0_sdram_s1_readdata;                                                   // SDRAM:za_data -> mm_interconnect_0:SDRAM_s1_readdata
-	wire         mm_interconnect_0_sdram_s1_waitrequest;                                                // SDRAM:za_waitrequest -> mm_interconnect_0:SDRAM_s1_waitrequest
-	wire  [24:0] mm_interconnect_0_sdram_s1_address;                                                    // mm_interconnect_0:SDRAM_s1_address -> SDRAM:az_addr
-	wire         mm_interconnect_0_sdram_s1_read;                                                       // mm_interconnect_0:SDRAM_s1_read -> SDRAM:az_rd_n
-	wire   [3:0] mm_interconnect_0_sdram_s1_byteenable;                                                 // mm_interconnect_0:SDRAM_s1_byteenable -> SDRAM:az_be_n
-	wire         mm_interconnect_0_sdram_s1_readdatavalid;                                              // SDRAM:za_valid -> mm_interconnect_0:SDRAM_s1_readdatavalid
-	wire         mm_interconnect_0_sdram_s1_write;                                                      // mm_interconnect_0:SDRAM_s1_write -> SDRAM:az_wr_n
-	wire  [31:0] mm_interconnect_0_sdram_s1_writedata;                                                  // mm_interconnect_0:SDRAM_s1_writedata -> SDRAM:az_data
-	wire         mm_interconnect_0_red_leds_s1_chipselect;                                              // mm_interconnect_0:Red_LEDs_s1_chipselect -> Red_LEDs:chipselect
-	wire  [31:0] mm_interconnect_0_red_leds_s1_readdata;                                                // Red_LEDs:readdata -> mm_interconnect_0:Red_LEDs_s1_readdata
-	wire   [1:0] mm_interconnect_0_red_leds_s1_address;                                                 // mm_interconnect_0:Red_LEDs_s1_address -> Red_LEDs:address
-	wire         mm_interconnect_0_red_leds_s1_write;                                                   // mm_interconnect_0:Red_LEDs_s1_write -> Red_LEDs:write_n
-	wire  [31:0] mm_interconnect_0_red_leds_s1_writedata;                                               // mm_interconnect_0:Red_LEDs_s1_writedata -> Red_LEDs:writedata
-	wire         mm_interconnect_0_green_leds_s1_chipselect;                                            // mm_interconnect_0:Green_LEDs_s1_chipselect -> Green_LEDs:chipselect
-	wire  [31:0] mm_interconnect_0_green_leds_s1_readdata;                                              // Green_LEDs:readdata -> mm_interconnect_0:Green_LEDs_s1_readdata
-	wire   [1:0] mm_interconnect_0_green_leds_s1_address;                                               // mm_interconnect_0:Green_LEDs_s1_address -> Green_LEDs:address
-	wire         mm_interconnect_0_green_leds_s1_write;                                                 // mm_interconnect_0:Green_LEDs_s1_write -> Green_LEDs:write_n
-	wire  [31:0] mm_interconnect_0_green_leds_s1_writedata;                                             // mm_interconnect_0:Green_LEDs_s1_writedata -> Green_LEDs:writedata
-	wire         mm_interconnect_0_hex3_hex0_s1_chipselect;                                             // mm_interconnect_0:HEX3_HEX0_s1_chipselect -> HEX3_HEX0:chipselect
-	wire  [31:0] mm_interconnect_0_hex3_hex0_s1_readdata;                                               // HEX3_HEX0:readdata -> mm_interconnect_0:HEX3_HEX0_s1_readdata
-	wire   [1:0] mm_interconnect_0_hex3_hex0_s1_address;                                                // mm_interconnect_0:HEX3_HEX0_s1_address -> HEX3_HEX0:address
-	wire         mm_interconnect_0_hex3_hex0_s1_write;                                                  // mm_interconnect_0:HEX3_HEX0_s1_write -> HEX3_HEX0:write_n
-	wire  [31:0] mm_interconnect_0_hex3_hex0_s1_writedata;                                              // mm_interconnect_0:HEX3_HEX0_s1_writedata -> HEX3_HEX0:writedata
-	wire         mm_interconnect_0_hex7_hex4_s1_chipselect;                                             // mm_interconnect_0:HEX7_HEX4_s1_chipselect -> HEX7_HEX4:chipselect
-	wire  [31:0] mm_interconnect_0_hex7_hex4_s1_readdata;                                               // HEX7_HEX4:readdata -> mm_interconnect_0:HEX7_HEX4_s1_readdata
-	wire   [1:0] mm_interconnect_0_hex7_hex4_s1_address;                                                // mm_interconnect_0:HEX7_HEX4_s1_address -> HEX7_HEX4:address
-	wire         mm_interconnect_0_hex7_hex4_s1_write;                                                  // mm_interconnect_0:HEX7_HEX4_s1_write -> HEX7_HEX4:write_n
-	wire  [31:0] mm_interconnect_0_hex7_hex4_s1_writedata;                                              // mm_interconnect_0:HEX7_HEX4_s1_writedata -> HEX7_HEX4:writedata
-	wire  [31:0] mm_interconnect_0_slider_switches_s1_readdata;                                         // Slider_Switches:readdata -> mm_interconnect_0:Slider_Switches_s1_readdata
-	wire   [1:0] mm_interconnect_0_slider_switches_s1_address;                                          // mm_interconnect_0:Slider_Switches_s1_address -> Slider_Switches:address
-	wire         mm_interconnect_0_pushbuttons_s1_chipselect;                                           // mm_interconnect_0:Pushbuttons_s1_chipselect -> Pushbuttons:chipselect
-	wire  [31:0] mm_interconnect_0_pushbuttons_s1_readdata;                                             // Pushbuttons:readdata -> mm_interconnect_0:Pushbuttons_s1_readdata
-	wire   [1:0] mm_interconnect_0_pushbuttons_s1_address;                                              // mm_interconnect_0:Pushbuttons_s1_address -> Pushbuttons:address
-	wire         mm_interconnect_0_pushbuttons_s1_write;                                                // mm_interconnect_0:Pushbuttons_s1_write -> Pushbuttons:write_n
-	wire  [31:0] mm_interconnect_0_pushbuttons_s1_writedata;                                            // mm_interconnect_0:Pushbuttons_s1_writedata -> Pushbuttons:writedata
-	wire         mm_interconnect_0_expansion_jp5_s1_chipselect;                                         // mm_interconnect_0:Expansion_JP5_s1_chipselect -> Expansion_JP5:chipselect
-	wire  [31:0] mm_interconnect_0_expansion_jp5_s1_readdata;                                           // Expansion_JP5:readdata -> mm_interconnect_0:Expansion_JP5_s1_readdata
-	wire   [1:0] mm_interconnect_0_expansion_jp5_s1_address;                                            // mm_interconnect_0:Expansion_JP5_s1_address -> Expansion_JP5:address
-	wire         mm_interconnect_0_expansion_jp5_s1_write;                                              // mm_interconnect_0:Expansion_JP5_s1_write -> Expansion_JP5:write_n
-	wire  [31:0] mm_interconnect_0_expansion_jp5_s1_writedata;                                          // mm_interconnect_0:Expansion_JP5_s1_writedata -> Expansion_JP5:writedata
-	wire         mm_interconnect_0_interval_timer_s1_chipselect;                                        // mm_interconnect_0:Interval_Timer_s1_chipselect -> Interval_Timer:chipselect
-	wire  [15:0] mm_interconnect_0_interval_timer_s1_readdata;                                          // Interval_Timer:readdata -> mm_interconnect_0:Interval_Timer_s1_readdata
-	wire   [2:0] mm_interconnect_0_interval_timer_s1_address;                                           // mm_interconnect_0:Interval_Timer_s1_address -> Interval_Timer:address
-	wire         mm_interconnect_0_interval_timer_s1_write;                                             // mm_interconnect_0:Interval_Timer_s1_write -> Interval_Timer:write_n
-	wire  [15:0] mm_interconnect_0_interval_timer_s1_writedata;                                         // mm_interconnect_0:Interval_Timer_s1_writedata -> Interval_Timer:writedata
-	wire         mm_interconnect_0_interval_timer_2_s1_chipselect;                                      // mm_interconnect_0:Interval_Timer_2_s1_chipselect -> Interval_Timer_2:chipselect
-	wire  [15:0] mm_interconnect_0_interval_timer_2_s1_readdata;                                        // Interval_Timer_2:readdata -> mm_interconnect_0:Interval_Timer_2_s1_readdata
-	wire   [2:0] mm_interconnect_0_interval_timer_2_s1_address;                                         // mm_interconnect_0:Interval_Timer_2_s1_address -> Interval_Timer_2:address
-	wire         mm_interconnect_0_interval_timer_2_s1_write;                                           // mm_interconnect_0:Interval_Timer_2_s1_write -> Interval_Timer_2:write_n
-	wire  [15:0] mm_interconnect_0_interval_timer_2_s1_writedata;                                       // mm_interconnect_0:Interval_Timer_2_s1_writedata -> Interval_Timer_2:writedata
-	wire  [31:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_readdata;              // Video_In_Subsystem:video_in_dma_control_slave_readdata -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_readdata
-	wire   [1:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_address;               // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_address -> Video_In_Subsystem:video_in_dma_control_slave_address
-	wire         mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_read;                  // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_read -> Video_In_Subsystem:video_in_dma_control_slave_read
-	wire   [3:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_byteenable;            // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_byteenable -> Video_In_Subsystem:video_in_dma_control_slave_byteenable
-	wire         mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_write;                 // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_write -> Video_In_Subsystem:video_in_dma_control_slave_write
-	wire  [31:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_writedata;             // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_writedata -> Video_In_Subsystem:video_in_dma_control_slave_writedata
-	wire         mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_chipselect; // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_chipselect -> Video_In_Subsystem:video_in_edge_detection_control_slave_chipselect
-	wire  [31:0] mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_readdata;   // Video_In_Subsystem:video_in_edge_detection_control_slave_readdata -> mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_readdata
-	wire   [1:0] mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_address;    // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_address -> Video_In_Subsystem:video_in_edge_detection_control_slave_address
-	wire         mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_write;      // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_write -> Video_In_Subsystem:video_in_edge_detection_control_slave_write_n
-	wire  [31:0] mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_writedata;  // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_writedata -> Video_In_Subsystem:video_in_edge_detection_control_slave_writedata
-	wire         irq_mapper_receiver0_irq;                                                              // Audio_Subsystem:audio_irq_irq -> irq_mapper:receiver0_irq
-	wire         irq_mapper_receiver1_irq;                                                              // PS2_Port:irq -> irq_mapper:receiver1_irq
-	wire         irq_mapper_receiver2_irq;                                                              // PS2_Port_Dual:irq -> irq_mapper:receiver2_irq
-	wire         irq_mapper_receiver3_irq;                                                              // USB:irq -> irq_mapper:receiver3_irq
-	wire         irq_mapper_receiver4_irq;                                                              // Serial_Port:irq -> irq_mapper:receiver4_irq
-	wire         irq_mapper_receiver5_irq;                                                              // IrDA:irq -> irq_mapper:receiver5_irq
-	wire         irq_mapper_receiver6_irq;                                                              // Pushbuttons:irq -> irq_mapper:receiver6_irq
-	wire         irq_mapper_receiver7_irq;                                                              // Expansion_JP5:irq -> irq_mapper:receiver7_irq
-	wire         irq_mapper_receiver8_irq;                                                              // JTAG_UART:av_irq -> irq_mapper:receiver8_irq
-	wire         irq_mapper_receiver9_irq;                                                              // Interval_Timer:irq -> irq_mapper:receiver9_irq
-	wire         irq_mapper_receiver10_irq;                                                             // Interval_Timer_2:irq -> irq_mapper:receiver10_irq
-	wire  [31:0] nios2_irq_irq;                                                                         // irq_mapper:sender_irq -> Nios2:irq
-	wire         rst_controller_reset_out_reset;                                                        // rst_controller:reset_out -> [AV_Config:reset, Char_LCD_16x2:reset, Expansion_JP5:reset_n, Flash:i_reset_n, Green_LEDs:reset_n, HEX3_HEX0:reset_n, HEX7_HEX4:reset_n, Interval_Timer:reset_n, Interval_Timer_2:reset_n, IrDA:reset, JTAG_UART:rst_n, PS2_Port:reset, PS2_Port_Dual:reset, Pushbuttons:reset_n, Red_LEDs:reset_n, SDRAM:reset_n, SD_Card:i_reset_n, SRAM:reset, Serial_Port:reset, Slider_Switches:reset_n, SysID:reset_n, USB:reset, mm_interconnect_0:AV_Config_reset_reset_bridge_in_reset_reset, mm_interconnect_0:JTAG_to_FPGA_Bridge_clk_reset_reset_bridge_in_reset_reset]
-	wire         rst_controller_001_reset_out_reset;                                                    // rst_controller_001:reset_out -> [Nios2:reset_n, irq_mapper:reset, mm_interconnect_0:Nios2_reset_reset_bridge_in_reset_reset]
-	wire         nios2_debug_reset_request_reset;                                                       // Nios2:debug_reset_request -> rst_controller_001:reset_in0
+	wire          system_pll_sys_clk_clk;                                                                // System_PLL:sys_clk_clk -> [AV_Config:clk, Audio_Subsystem:sys_clk_clk, Char_LCD_16x2:clk, Expansion_JP5:clk, Flash:i_clock, Green_LEDs:clk, HEX3_HEX0:clk, HEX7_HEX4:clk, Interval_Timer:clk, Interval_Timer_2:clk, IrDA:clk, JTAG_UART:clk, JTAG_to_FPGA_Bridge:clk_clk, Nios2:clk, PS2_Port:clk, PS2_Port_Dual:clk, Pushbuttons:clk, Red_LEDs:clk, SDRAM:clk, SD_Card:i_clock, SRAM:clk, Serial_Port:clk, Slider_Switches:clk, SysID:clock, USB:clk, VGA_Subsystem:sys_clk_clk, Video_In_Subsystem:sys_clk_clk, camera:clk_clk, irq_mapper:clk, mm_interconnect_0:System_PLL_sys_clk_clk, rst_controller:clk, rst_controller_001:clk]
+	wire          video_pll_vga_clk_clk;                                                                 // Video_PLL:vga_clk_clk -> VGA_Subsystem:vga_clk_clk
+	wire          system_pll_reset_source_reset;                                                         // System_PLL:reset_source_reset -> [Audio_Subsystem:sys_reset_reset_n, JTAG_to_FPGA_Bridge:clk_reset_reset, VGA_Subsystem:sys_reset_reset_n, Video_In_Subsystem:sys_reset_reset_n, rst_controller:reset_in0, rst_controller_001:reset_in1]
+	wire          video_pll_reset_source_reset;                                                          // Video_PLL:reset_source_reset -> VGA_Subsystem:vga_reset_reset_n
+	wire   [31:0] nios2_custom_instruction_master_multi_dataa;                                           // Nios2:A_ci_multi_dataa -> Nios2_custom_instruction_master_translator:ci_slave_multi_dataa
+	wire          nios2_custom_instruction_master_multi_writerc;                                         // Nios2:A_ci_multi_writerc -> Nios2_custom_instruction_master_translator:ci_slave_multi_writerc
+	wire   [31:0] nios2_custom_instruction_master_multi_result;                                          // Nios2_custom_instruction_master_translator:ci_slave_multi_result -> Nios2:A_ci_multi_result
+	wire          nios2_custom_instruction_master_clk;                                                   // Nios2:A_ci_multi_clock -> Nios2_custom_instruction_master_translator:ci_slave_multi_clk
+	wire   [31:0] nios2_custom_instruction_master_multi_datab;                                           // Nios2:A_ci_multi_datab -> Nios2_custom_instruction_master_translator:ci_slave_multi_datab
+	wire          nios2_custom_instruction_master_start;                                                 // Nios2:A_ci_multi_start -> Nios2_custom_instruction_master_translator:ci_slave_multi_start
+	wire    [4:0] nios2_custom_instruction_master_multi_b;                                               // Nios2:A_ci_multi_b -> Nios2_custom_instruction_master_translator:ci_slave_multi_b
+	wire    [4:0] nios2_custom_instruction_master_multi_c;                                               // Nios2:A_ci_multi_c -> Nios2_custom_instruction_master_translator:ci_slave_multi_c
+	wire          nios2_custom_instruction_master_reset_req;                                             // Nios2:A_ci_multi_reset_req -> Nios2_custom_instruction_master_translator:ci_slave_multi_reset_req
+	wire          nios2_custom_instruction_master_done;                                                  // Nios2_custom_instruction_master_translator:ci_slave_multi_done -> Nios2:A_ci_multi_done
+	wire    [4:0] nios2_custom_instruction_master_multi_a;                                               // Nios2:A_ci_multi_a -> Nios2_custom_instruction_master_translator:ci_slave_multi_a
+	wire          nios2_custom_instruction_master_clk_en;                                                // Nios2:A_ci_multi_clk_en -> Nios2_custom_instruction_master_translator:ci_slave_multi_clken
+	wire          nios2_custom_instruction_master_reset;                                                 // Nios2:A_ci_multi_reset -> Nios2_custom_instruction_master_translator:ci_slave_multi_reset
+	wire          nios2_custom_instruction_master_multi_readrb;                                          // Nios2:A_ci_multi_readrb -> Nios2_custom_instruction_master_translator:ci_slave_multi_readrb
+	wire          nios2_custom_instruction_master_multi_readra;                                          // Nios2:A_ci_multi_readra -> Nios2_custom_instruction_master_translator:ci_slave_multi_readra
+	wire    [7:0] nios2_custom_instruction_master_multi_n;                                               // Nios2:A_ci_multi_n -> Nios2_custom_instruction_master_translator:ci_slave_multi_n
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_readra;                     // Nios2_custom_instruction_master_translator:multi_ci_master_readra -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_readra
+	wire    [4:0] nios2_custom_instruction_master_translator_multi_ci_master_a;                          // Nios2_custom_instruction_master_translator:multi_ci_master_a -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_a
+	wire    [4:0] nios2_custom_instruction_master_translator_multi_ci_master_b;                          // Nios2_custom_instruction_master_translator:multi_ci_master_b -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_b
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_clk;                        // Nios2_custom_instruction_master_translator:multi_ci_master_clk -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_clk
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_readrb;                     // Nios2_custom_instruction_master_translator:multi_ci_master_readrb -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_readrb
+	wire    [4:0] nios2_custom_instruction_master_translator_multi_ci_master_c;                          // Nios2_custom_instruction_master_translator:multi_ci_master_c -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_c
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_start;                      // Nios2_custom_instruction_master_translator:multi_ci_master_start -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_start
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_reset_req;                  // Nios2_custom_instruction_master_translator:multi_ci_master_reset_req -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_reset_req
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_done;                       // Nios2_custom_instruction_master_multi_xconnect:ci_slave_done -> Nios2_custom_instruction_master_translator:multi_ci_master_done
+	wire    [7:0] nios2_custom_instruction_master_translator_multi_ci_master_n;                          // Nios2_custom_instruction_master_translator:multi_ci_master_n -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_n
+	wire   [31:0] nios2_custom_instruction_master_translator_multi_ci_master_result;                     // Nios2_custom_instruction_master_multi_xconnect:ci_slave_result -> Nios2_custom_instruction_master_translator:multi_ci_master_result
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_clk_en;                     // Nios2_custom_instruction_master_translator:multi_ci_master_clken -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_clken
+	wire   [31:0] nios2_custom_instruction_master_translator_multi_ci_master_datab;                      // Nios2_custom_instruction_master_translator:multi_ci_master_datab -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_datab
+	wire   [31:0] nios2_custom_instruction_master_translator_multi_ci_master_dataa;                      // Nios2_custom_instruction_master_translator:multi_ci_master_dataa -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_dataa
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_reset;                      // Nios2_custom_instruction_master_translator:multi_ci_master_reset -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_reset
+	wire          nios2_custom_instruction_master_translator_multi_ci_master_writerc;                    // Nios2_custom_instruction_master_translator:multi_ci_master_writerc -> Nios2_custom_instruction_master_multi_xconnect:ci_slave_writerc
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_readra;                      // Nios2_custom_instruction_master_multi_xconnect:ci_master0_readra -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_readra
+	wire    [4:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_a;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_a -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_a
+	wire    [4:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_b;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_b -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_b
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_readrb;                      // Nios2_custom_instruction_master_multi_xconnect:ci_master0_readrb -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_readrb
+	wire    [4:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_c;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_c -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_c
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_clk;                         // Nios2_custom_instruction_master_multi_xconnect:ci_master0_clk -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_clk
+	wire   [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_ipending;                    // Nios2_custom_instruction_master_multi_xconnect:ci_master0_ipending -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_ipending
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_start;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_start -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_start
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_reset_req;                   // Nios2_custom_instruction_master_multi_xconnect:ci_master0_reset_req -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_reset_req
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_done;                        // Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_done -> Nios2_custom_instruction_master_multi_xconnect:ci_master0_done
+	wire    [7:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_n;                           // Nios2_custom_instruction_master_multi_xconnect:ci_master0_n -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_n
+	wire   [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_result;                      // Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_result -> Nios2_custom_instruction_master_multi_xconnect:ci_master0_result
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_estatus;                     // Nios2_custom_instruction_master_multi_xconnect:ci_master0_estatus -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_estatus
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_clk_en;                      // Nios2_custom_instruction_master_multi_xconnect:ci_master0_clken -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_clken
+	wire   [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_datab;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_datab -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_datab
+	wire   [31:0] nios2_custom_instruction_master_multi_xconnect_ci_master0_dataa;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_dataa -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_dataa
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_reset;                       // Nios2_custom_instruction_master_multi_xconnect:ci_master0_reset -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_reset
+	wire          nios2_custom_instruction_master_multi_xconnect_ci_master0_writerc;                     // Nios2_custom_instruction_master_multi_xconnect:ci_master0_writerc -> Nios2_custom_instruction_master_multi_slave_translator0:ci_slave_writerc
+	wire   [31:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_result;              // Nios2_Floating_Point:result -> Nios2_custom_instruction_master_multi_slave_translator0:ci_master_result
+	wire          nios2_custom_instruction_master_multi_slave_translator0_ci_master_clk;                 // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_clk -> Nios2_Floating_Point:clk
+	wire          nios2_custom_instruction_master_multi_slave_translator0_ci_master_clk_en;              // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_clken -> Nios2_Floating_Point:clk_en
+	wire   [31:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_datab;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_datab -> Nios2_Floating_Point:datab
+	wire   [31:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_dataa;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_dataa -> Nios2_Floating_Point:dataa
+	wire          nios2_custom_instruction_master_multi_slave_translator0_ci_master_start;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_start -> Nios2_Floating_Point:start
+	wire          nios2_custom_instruction_master_multi_slave_translator0_ci_master_reset;               // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_reset -> Nios2_Floating_Point:reset
+	wire          nios2_custom_instruction_master_multi_slave_translator0_ci_master_done;                // Nios2_Floating_Point:done -> Nios2_custom_instruction_master_multi_slave_translator0:ci_master_done
+	wire    [1:0] nios2_custom_instruction_master_multi_slave_translator0_ci_master_n;                   // Nios2_custom_instruction_master_multi_slave_translator0:ci_master_n -> Nios2_Floating_Point:n
+	wire   [31:0] nios2_data_master_readdata;                                                            // mm_interconnect_0:Nios2_data_master_readdata -> Nios2:d_readdata
+	wire          nios2_data_master_waitrequest;                                                         // mm_interconnect_0:Nios2_data_master_waitrequest -> Nios2:d_waitrequest
+	wire          nios2_data_master_debugaccess;                                                         // Nios2:debug_mem_slave_debugaccess_to_roms -> mm_interconnect_0:Nios2_data_master_debugaccess
+	wire   [31:0] nios2_data_master_address;                                                             // Nios2:d_address -> mm_interconnect_0:Nios2_data_master_address
+	wire    [3:0] nios2_data_master_byteenable;                                                          // Nios2:d_byteenable -> mm_interconnect_0:Nios2_data_master_byteenable
+	wire          nios2_data_master_read;                                                                // Nios2:d_read -> mm_interconnect_0:Nios2_data_master_read
+	wire          nios2_data_master_write;                                                               // Nios2:d_write -> mm_interconnect_0:Nios2_data_master_write
+	wire   [31:0] nios2_data_master_writedata;                                                           // Nios2:d_writedata -> mm_interconnect_0:Nios2_data_master_writedata
+	wire   [31:0] jtag_to_fpga_bridge_master_readdata;                                                   // mm_interconnect_0:JTAG_to_FPGA_Bridge_master_readdata -> JTAG_to_FPGA_Bridge:master_readdata
+	wire          jtag_to_fpga_bridge_master_waitrequest;                                                // mm_interconnect_0:JTAG_to_FPGA_Bridge_master_waitrequest -> JTAG_to_FPGA_Bridge:master_waitrequest
+	wire   [31:0] jtag_to_fpga_bridge_master_address;                                                    // JTAG_to_FPGA_Bridge:master_address -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_address
+	wire          jtag_to_fpga_bridge_master_read;                                                       // JTAG_to_FPGA_Bridge:master_read -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_read
+	wire    [3:0] jtag_to_fpga_bridge_master_byteenable;                                                 // JTAG_to_FPGA_Bridge:master_byteenable -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_byteenable
+	wire          jtag_to_fpga_bridge_master_readdatavalid;                                              // mm_interconnect_0:JTAG_to_FPGA_Bridge_master_readdatavalid -> JTAG_to_FPGA_Bridge:master_readdatavalid
+	wire          jtag_to_fpga_bridge_master_write;                                                      // JTAG_to_FPGA_Bridge:master_write -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_write
+	wire   [31:0] jtag_to_fpga_bridge_master_writedata;                                                  // JTAG_to_FPGA_Bridge:master_writedata -> mm_interconnect_0:JTAG_to_FPGA_Bridge_master_writedata
+	wire   [31:0] nios2_instruction_master_readdata;                                                     // mm_interconnect_0:Nios2_instruction_master_readdata -> Nios2:i_readdata
+	wire          nios2_instruction_master_waitrequest;                                                  // mm_interconnect_0:Nios2_instruction_master_waitrequest -> Nios2:i_waitrequest
+	wire   [27:0] nios2_instruction_master_address;                                                      // Nios2:i_address -> mm_interconnect_0:Nios2_instruction_master_address
+	wire          nios2_instruction_master_read;                                                         // Nios2:i_read -> mm_interconnect_0:Nios2_instruction_master_read
+	wire          nios2_instruction_master_readdatavalid;                                                // mm_interconnect_0:Nios2_instruction_master_readdatavalid -> Nios2:i_readdatavalid
+	wire          vga_subsystem_pixel_dma_master_waitrequest;                                            // mm_interconnect_0:VGA_Subsystem_pixel_dma_master_waitrequest -> VGA_Subsystem:pixel_dma_master_waitrequest
+	wire   [15:0] vga_subsystem_pixel_dma_master_readdata;                                               // mm_interconnect_0:VGA_Subsystem_pixel_dma_master_readdata -> VGA_Subsystem:pixel_dma_master_readdata
+	wire   [31:0] vga_subsystem_pixel_dma_master_address;                                                // VGA_Subsystem:pixel_dma_master_address -> mm_interconnect_0:VGA_Subsystem_pixel_dma_master_address
+	wire          vga_subsystem_pixel_dma_master_read;                                                   // VGA_Subsystem:pixel_dma_master_read -> mm_interconnect_0:VGA_Subsystem_pixel_dma_master_read
+	wire          vga_subsystem_pixel_dma_master_readdatavalid;                                          // mm_interconnect_0:VGA_Subsystem_pixel_dma_master_readdatavalid -> VGA_Subsystem:pixel_dma_master_readdatavalid
+	wire          vga_subsystem_pixel_dma_master_lock;                                                   // VGA_Subsystem:pixel_dma_master_lock -> mm_interconnect_0:VGA_Subsystem_pixel_dma_master_lock
+	wire          camera_to_ram_rd_waitrequest;                                                          // mm_interconnect_0:camera_to_ram_rd_waitrequest -> camera:to_ram_rd_waitrequest
+	wire  [127:0] camera_to_ram_rd_readdata;                                                             // mm_interconnect_0:camera_to_ram_rd_readdata -> camera:to_ram_rd_readdata
+	wire   [31:0] camera_to_ram_rd_address;                                                              // camera:to_ram_rd_address -> mm_interconnect_0:camera_to_ram_rd_address
+	wire          camera_to_ram_rd_read;                                                                 // camera:to_ram_rd_read -> mm_interconnect_0:camera_to_ram_rd_read
+	wire          camera_to_ram_rd_readdatavalid;                                                        // mm_interconnect_0:camera_to_ram_rd_readdatavalid -> camera:to_ram_rd_readdatavalid
+	wire    [5:0] camera_to_ram_rd_burstcount;                                                           // camera:to_ram_rd_burstcount -> mm_interconnect_0:camera_to_ram_rd_burstcount
+	wire          camera_to_ram_wr_waitrequest;                                                          // mm_interconnect_0:camera_to_ram_wr_waitrequest -> camera:to_ram_wr_waitrequest
+	wire   [31:0] camera_to_ram_wr_address;                                                              // camera:to_ram_wr_address -> mm_interconnect_0:camera_to_ram_wr_address
+	wire          camera_to_ram_wr_write;                                                                // camera:to_ram_wr_write -> mm_interconnect_0:camera_to_ram_wr_write
+	wire  [127:0] camera_to_ram_wr_writedata;                                                            // camera:to_ram_wr_writedata -> mm_interconnect_0:camera_to_ram_wr_writedata
+	wire    [3:0] camera_to_ram_wr_burstcount;                                                           // camera:to_ram_wr_burstcount -> mm_interconnect_0:camera_to_ram_wr_burstcount
+	wire          video_in_subsystem_video_in_dma_master_waitrequest;                                    // mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_waitrequest -> Video_In_Subsystem:video_in_dma_master_waitrequest
+	wire   [31:0] video_in_subsystem_video_in_dma_master_address;                                        // Video_In_Subsystem:video_in_dma_master_address -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_address
+	wire          video_in_subsystem_video_in_dma_master_write;                                          // Video_In_Subsystem:video_in_dma_master_write -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_write
+	wire   [15:0] video_in_subsystem_video_in_dma_master_writedata;                                      // Video_In_Subsystem:video_in_dma_master_writedata -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_master_writedata
+	wire          mm_interconnect_0_audio_subsystem_audio_slave_chipselect;                              // mm_interconnect_0:Audio_Subsystem_audio_slave_chipselect -> Audio_Subsystem:audio_slave_chipselect
+	wire   [31:0] mm_interconnect_0_audio_subsystem_audio_slave_readdata;                                // Audio_Subsystem:audio_slave_readdata -> mm_interconnect_0:Audio_Subsystem_audio_slave_readdata
+	wire    [1:0] mm_interconnect_0_audio_subsystem_audio_slave_address;                                 // mm_interconnect_0:Audio_Subsystem_audio_slave_address -> Audio_Subsystem:audio_slave_address
+	wire          mm_interconnect_0_audio_subsystem_audio_slave_read;                                    // mm_interconnect_0:Audio_Subsystem_audio_slave_read -> Audio_Subsystem:audio_slave_read
+	wire          mm_interconnect_0_audio_subsystem_audio_slave_write;                                   // mm_interconnect_0:Audio_Subsystem_audio_slave_write -> Audio_Subsystem:audio_slave_write
+	wire   [31:0] mm_interconnect_0_audio_subsystem_audio_slave_writedata;                               // mm_interconnect_0:Audio_Subsystem_audio_slave_writedata -> Audio_Subsystem:audio_slave_writedata
+	wire   [31:0] mm_interconnect_0_av_config_avalon_av_config_slave_readdata;                           // AV_Config:readdata -> mm_interconnect_0:AV_Config_avalon_av_config_slave_readdata
+	wire          mm_interconnect_0_av_config_avalon_av_config_slave_waitrequest;                        // AV_Config:waitrequest -> mm_interconnect_0:AV_Config_avalon_av_config_slave_waitrequest
+	wire    [1:0] mm_interconnect_0_av_config_avalon_av_config_slave_address;                            // mm_interconnect_0:AV_Config_avalon_av_config_slave_address -> AV_Config:address
+	wire          mm_interconnect_0_av_config_avalon_av_config_slave_read;                               // mm_interconnect_0:AV_Config_avalon_av_config_slave_read -> AV_Config:read
+	wire    [3:0] mm_interconnect_0_av_config_avalon_av_config_slave_byteenable;                         // mm_interconnect_0:AV_Config_avalon_av_config_slave_byteenable -> AV_Config:byteenable
+	wire          mm_interconnect_0_av_config_avalon_av_config_slave_write;                              // mm_interconnect_0:AV_Config_avalon_av_config_slave_write -> AV_Config:write
+	wire   [31:0] mm_interconnect_0_av_config_avalon_av_config_slave_writedata;                          // mm_interconnect_0:AV_Config_avalon_av_config_slave_writedata -> AV_Config:writedata
+	wire          mm_interconnect_0_irda_avalon_irda_slave_chipselect;                                   // mm_interconnect_0:IrDA_avalon_irda_slave_chipselect -> IrDA:chipselect
+	wire   [31:0] mm_interconnect_0_irda_avalon_irda_slave_readdata;                                     // IrDA:readdata -> mm_interconnect_0:IrDA_avalon_irda_slave_readdata
+	wire    [0:0] mm_interconnect_0_irda_avalon_irda_slave_address;                                      // mm_interconnect_0:IrDA_avalon_irda_slave_address -> IrDA:address
+	wire          mm_interconnect_0_irda_avalon_irda_slave_read;                                         // mm_interconnect_0:IrDA_avalon_irda_slave_read -> IrDA:read
+	wire    [3:0] mm_interconnect_0_irda_avalon_irda_slave_byteenable;                                   // mm_interconnect_0:IrDA_avalon_irda_slave_byteenable -> IrDA:byteenable
+	wire          mm_interconnect_0_irda_avalon_irda_slave_write;                                        // mm_interconnect_0:IrDA_avalon_irda_slave_write -> IrDA:write
+	wire   [31:0] mm_interconnect_0_irda_avalon_irda_slave_writedata;                                    // mm_interconnect_0:IrDA_avalon_irda_slave_writedata -> IrDA:writedata
+	wire          mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect;                              // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_chipselect -> JTAG_UART:av_chipselect
+	wire   [31:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata;                                // JTAG_UART:av_readdata -> mm_interconnect_0:JTAG_UART_avalon_jtag_slave_readdata
+	wire          mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest;                             // JTAG_UART:av_waitrequest -> mm_interconnect_0:JTAG_UART_avalon_jtag_slave_waitrequest
+	wire    [0:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_address;                                 // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_address -> JTAG_UART:av_address
+	wire          mm_interconnect_0_jtag_uart_avalon_jtag_slave_read;                                    // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_read -> JTAG_UART:av_read_n
+	wire          mm_interconnect_0_jtag_uart_avalon_jtag_slave_write;                                   // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_write -> JTAG_UART:av_write_n
+	wire   [31:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata;                               // mm_interconnect_0:JTAG_UART_avalon_jtag_slave_writedata -> JTAG_UART:av_writedata
+	wire          mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_chipselect;                           // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_chipselect -> Char_LCD_16x2:chipselect
+	wire    [7:0] mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_readdata;                             // Char_LCD_16x2:readdata -> mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_readdata
+	wire          mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_waitrequest;                          // Char_LCD_16x2:waitrequest -> mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_waitrequest
+	wire    [0:0] mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_address;                              // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_address -> Char_LCD_16x2:address
+	wire          mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_read;                                 // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_read -> Char_LCD_16x2:read
+	wire          mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_write;                                // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_write -> Char_LCD_16x2:write
+	wire    [7:0] mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_writedata;                            // mm_interconnect_0:Char_LCD_16x2_avalon_lcd_slave_writedata -> Char_LCD_16x2:writedata
+	wire          mm_interconnect_0_ps2_port_avalon_ps2_slave_chipselect;                                // mm_interconnect_0:PS2_Port_avalon_ps2_slave_chipselect -> PS2_Port:chipselect
+	wire   [31:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_readdata;                                  // PS2_Port:readdata -> mm_interconnect_0:PS2_Port_avalon_ps2_slave_readdata
+	wire          mm_interconnect_0_ps2_port_avalon_ps2_slave_waitrequest;                               // PS2_Port:waitrequest -> mm_interconnect_0:PS2_Port_avalon_ps2_slave_waitrequest
+	wire    [0:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_address;                                   // mm_interconnect_0:PS2_Port_avalon_ps2_slave_address -> PS2_Port:address
+	wire          mm_interconnect_0_ps2_port_avalon_ps2_slave_read;                                      // mm_interconnect_0:PS2_Port_avalon_ps2_slave_read -> PS2_Port:read
+	wire    [3:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_byteenable;                                // mm_interconnect_0:PS2_Port_avalon_ps2_slave_byteenable -> PS2_Port:byteenable
+	wire          mm_interconnect_0_ps2_port_avalon_ps2_slave_write;                                     // mm_interconnect_0:PS2_Port_avalon_ps2_slave_write -> PS2_Port:write
+	wire   [31:0] mm_interconnect_0_ps2_port_avalon_ps2_slave_writedata;                                 // mm_interconnect_0:PS2_Port_avalon_ps2_slave_writedata -> PS2_Port:writedata
+	wire          mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_chipselect;                           // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_chipselect -> PS2_Port_Dual:chipselect
+	wire   [31:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_readdata;                             // PS2_Port_Dual:readdata -> mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_readdata
+	wire          mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_waitrequest;                          // PS2_Port_Dual:waitrequest -> mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_waitrequest
+	wire    [0:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_address;                              // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_address -> PS2_Port_Dual:address
+	wire          mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_read;                                 // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_read -> PS2_Port_Dual:read
+	wire    [3:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_byteenable;                           // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_byteenable -> PS2_Port_Dual:byteenable
+	wire          mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_write;                                // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_write -> PS2_Port_Dual:write
+	wire   [31:0] mm_interconnect_0_ps2_port_dual_avalon_ps2_slave_writedata;                            // mm_interconnect_0:PS2_Port_Dual_avalon_ps2_slave_writedata -> PS2_Port_Dual:writedata
+	wire          mm_interconnect_0_serial_port_avalon_rs232_slave_chipselect;                           // mm_interconnect_0:Serial_Port_avalon_rs232_slave_chipselect -> Serial_Port:chipselect
+	wire   [31:0] mm_interconnect_0_serial_port_avalon_rs232_slave_readdata;                             // Serial_Port:readdata -> mm_interconnect_0:Serial_Port_avalon_rs232_slave_readdata
+	wire    [0:0] mm_interconnect_0_serial_port_avalon_rs232_slave_address;                              // mm_interconnect_0:Serial_Port_avalon_rs232_slave_address -> Serial_Port:address
+	wire          mm_interconnect_0_serial_port_avalon_rs232_slave_read;                                 // mm_interconnect_0:Serial_Port_avalon_rs232_slave_read -> Serial_Port:read
+	wire    [3:0] mm_interconnect_0_serial_port_avalon_rs232_slave_byteenable;                           // mm_interconnect_0:Serial_Port_avalon_rs232_slave_byteenable -> Serial_Port:byteenable
+	wire          mm_interconnect_0_serial_port_avalon_rs232_slave_write;                                // mm_interconnect_0:Serial_Port_avalon_rs232_slave_write -> Serial_Port:write
+	wire   [31:0] mm_interconnect_0_serial_port_avalon_rs232_slave_writedata;                            // mm_interconnect_0:Serial_Port_avalon_rs232_slave_writedata -> Serial_Port:writedata
+	wire          mm_interconnect_0_sd_card_avalon_sdcard_slave_chipselect;                              // mm_interconnect_0:SD_Card_avalon_sdcard_slave_chipselect -> SD_Card:i_avalon_chip_select
+	wire   [31:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_readdata;                                // SD_Card:o_avalon_readdata -> mm_interconnect_0:SD_Card_avalon_sdcard_slave_readdata
+	wire          mm_interconnect_0_sd_card_avalon_sdcard_slave_waitrequest;                             // SD_Card:o_avalon_waitrequest -> mm_interconnect_0:SD_Card_avalon_sdcard_slave_waitrequest
+	wire    [7:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_address;                                 // mm_interconnect_0:SD_Card_avalon_sdcard_slave_address -> SD_Card:i_avalon_address
+	wire          mm_interconnect_0_sd_card_avalon_sdcard_slave_read;                                    // mm_interconnect_0:SD_Card_avalon_sdcard_slave_read -> SD_Card:i_avalon_read
+	wire    [3:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_byteenable;                              // mm_interconnect_0:SD_Card_avalon_sdcard_slave_byteenable -> SD_Card:i_avalon_byteenable
+	wire          mm_interconnect_0_sd_card_avalon_sdcard_slave_write;                                   // mm_interconnect_0:SD_Card_avalon_sdcard_slave_write -> SD_Card:i_avalon_write
+	wire   [31:0] mm_interconnect_0_sd_card_avalon_sdcard_slave_writedata;                               // mm_interconnect_0:SD_Card_avalon_sdcard_slave_writedata -> SD_Card:i_avalon_writedata
+	wire   [15:0] mm_interconnect_0_sram_avalon_sram_slave_readdata;                                     // SRAM:readdata -> mm_interconnect_0:SRAM_avalon_sram_slave_readdata
+	wire   [19:0] mm_interconnect_0_sram_avalon_sram_slave_address;                                      // mm_interconnect_0:SRAM_avalon_sram_slave_address -> SRAM:address
+	wire          mm_interconnect_0_sram_avalon_sram_slave_read;                                         // mm_interconnect_0:SRAM_avalon_sram_slave_read -> SRAM:read
+	wire    [1:0] mm_interconnect_0_sram_avalon_sram_slave_byteenable;                                   // mm_interconnect_0:SRAM_avalon_sram_slave_byteenable -> SRAM:byteenable
+	wire          mm_interconnect_0_sram_avalon_sram_slave_readdatavalid;                                // SRAM:readdatavalid -> mm_interconnect_0:SRAM_avalon_sram_slave_readdatavalid
+	wire          mm_interconnect_0_sram_avalon_sram_slave_write;                                        // mm_interconnect_0:SRAM_avalon_sram_slave_write -> SRAM:write
+	wire   [15:0] mm_interconnect_0_sram_avalon_sram_slave_writedata;                                    // mm_interconnect_0:SRAM_avalon_sram_slave_writedata -> SRAM:writedata
+	wire          mm_interconnect_0_usb_avalon_usb_slave_chipselect;                                     // mm_interconnect_0:USB_avalon_usb_slave_chipselect -> USB:chipselect
+	wire   [15:0] mm_interconnect_0_usb_avalon_usb_slave_readdata;                                       // USB:readdata -> mm_interconnect_0:USB_avalon_usb_slave_readdata
+	wire    [1:0] mm_interconnect_0_usb_avalon_usb_slave_address;                                        // mm_interconnect_0:USB_avalon_usb_slave_address -> USB:address
+	wire          mm_interconnect_0_usb_avalon_usb_slave_read;                                           // mm_interconnect_0:USB_avalon_usb_slave_read -> USB:read
+	wire          mm_interconnect_0_usb_avalon_usb_slave_write;                                          // mm_interconnect_0:USB_avalon_usb_slave_write -> USB:write
+	wire   [15:0] mm_interconnect_0_usb_avalon_usb_slave_writedata;                                      // mm_interconnect_0:USB_avalon_usb_slave_writedata -> USB:writedata
+	wire   [31:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_readdata;                    // VGA_Subsystem:char_buffer_control_slave_readdata -> mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_readdata
+	wire    [1:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_address;                     // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_address -> VGA_Subsystem:char_buffer_control_slave_address
+	wire          mm_interconnect_0_vga_subsystem_char_buffer_control_slave_read;                        // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_read -> VGA_Subsystem:char_buffer_control_slave_read
+	wire    [3:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_byteenable;                  // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_byteenable -> VGA_Subsystem:char_buffer_control_slave_byteenable
+	wire          mm_interconnect_0_vga_subsystem_char_buffer_control_slave_write;                       // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_write -> VGA_Subsystem:char_buffer_control_slave_write
+	wire   [31:0] mm_interconnect_0_vga_subsystem_char_buffer_control_slave_writedata;                   // mm_interconnect_0:VGA_Subsystem_char_buffer_control_slave_writedata -> VGA_Subsystem:char_buffer_control_slave_writedata
+	wire          mm_interconnect_0_vga_subsystem_char_buffer_slave_chipselect;                          // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_chipselect -> VGA_Subsystem:char_buffer_slave_chipselect
+	wire   [31:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_readdata;                            // VGA_Subsystem:char_buffer_slave_readdata -> mm_interconnect_0:VGA_Subsystem_char_buffer_slave_readdata
+	wire   [10:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_address;                             // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_address -> VGA_Subsystem:char_buffer_slave_address
+	wire    [3:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_byteenable;                          // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_byteenable -> VGA_Subsystem:char_buffer_slave_byteenable
+	wire          mm_interconnect_0_vga_subsystem_char_buffer_slave_write;                               // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_write -> VGA_Subsystem:char_buffer_slave_write
+	wire   [31:0] mm_interconnect_0_vga_subsystem_char_buffer_slave_writedata;                           // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_writedata -> VGA_Subsystem:char_buffer_slave_writedata
+	wire          mm_interconnect_0_vga_subsystem_char_buffer_slave_clken;                               // mm_interconnect_0:VGA_Subsystem_char_buffer_slave_clken -> VGA_Subsystem:char_buffer_slave_clken
+	wire   [31:0] mm_interconnect_0_sysid_control_slave_readdata;                                        // SysID:readdata -> mm_interconnect_0:SysID_control_slave_readdata
+	wire    [0:0] mm_interconnect_0_sysid_control_slave_address;                                         // mm_interconnect_0:SysID_control_slave_address -> SysID:address
+	wire   [31:0] mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_readdata;                   // camera:d5m_config_avalon_av_config_slave_readdata -> mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_readdata
+	wire          mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_waitrequest;                // camera:d5m_config_avalon_av_config_slave_waitrequest -> mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_waitrequest
+	wire    [1:0] mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_address;                    // mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_address -> camera:d5m_config_avalon_av_config_slave_address
+	wire          mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_read;                       // mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_read -> camera:d5m_config_avalon_av_config_slave_read
+	wire    [3:0] mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_byteenable;                 // mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_byteenable -> camera:d5m_config_avalon_av_config_slave_byteenable
+	wire          mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_write;                      // mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_write -> camera:d5m_config_avalon_av_config_slave_write
+	wire   [31:0] mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_writedata;                  // mm_interconnect_0:camera_d5m_config_avalon_av_config_slave_writedata -> camera:d5m_config_avalon_av_config_slave_writedata
+	wire   [31:0] mm_interconnect_0_nios2_debug_mem_slave_readdata;                                      // Nios2:debug_mem_slave_readdata -> mm_interconnect_0:Nios2_debug_mem_slave_readdata
+	wire          mm_interconnect_0_nios2_debug_mem_slave_waitrequest;                                   // Nios2:debug_mem_slave_waitrequest -> mm_interconnect_0:Nios2_debug_mem_slave_waitrequest
+	wire          mm_interconnect_0_nios2_debug_mem_slave_debugaccess;                                   // mm_interconnect_0:Nios2_debug_mem_slave_debugaccess -> Nios2:debug_mem_slave_debugaccess
+	wire    [8:0] mm_interconnect_0_nios2_debug_mem_slave_address;                                       // mm_interconnect_0:Nios2_debug_mem_slave_address -> Nios2:debug_mem_slave_address
+	wire          mm_interconnect_0_nios2_debug_mem_slave_read;                                          // mm_interconnect_0:Nios2_debug_mem_slave_read -> Nios2:debug_mem_slave_read
+	wire    [3:0] mm_interconnect_0_nios2_debug_mem_slave_byteenable;                                    // mm_interconnect_0:Nios2_debug_mem_slave_byteenable -> Nios2:debug_mem_slave_byteenable
+	wire          mm_interconnect_0_nios2_debug_mem_slave_write;                                         // mm_interconnect_0:Nios2_debug_mem_slave_write -> Nios2:debug_mem_slave_write
+	wire   [31:0] mm_interconnect_0_nios2_debug_mem_slave_writedata;                                     // mm_interconnect_0:Nios2_debug_mem_slave_writedata -> Nios2:debug_mem_slave_writedata
+	wire          mm_interconnect_0_flash_flash_data_chipselect;                                         // mm_interconnect_0:Flash_flash_data_chipselect -> Flash:i_avalon_chip_select
+	wire   [31:0] mm_interconnect_0_flash_flash_data_readdata;                                           // Flash:o_avalon_readdata -> mm_interconnect_0:Flash_flash_data_readdata
+	wire          mm_interconnect_0_flash_flash_data_waitrequest;                                        // Flash:o_avalon_waitrequest -> mm_interconnect_0:Flash_flash_data_waitrequest
+	wire   [20:0] mm_interconnect_0_flash_flash_data_address;                                            // mm_interconnect_0:Flash_flash_data_address -> Flash:i_avalon_address
+	wire          mm_interconnect_0_flash_flash_data_read;                                               // mm_interconnect_0:Flash_flash_data_read -> Flash:i_avalon_read
+	wire    [3:0] mm_interconnect_0_flash_flash_data_byteenable;                                         // mm_interconnect_0:Flash_flash_data_byteenable -> Flash:i_avalon_byteenable
+	wire          mm_interconnect_0_flash_flash_data_write;                                              // mm_interconnect_0:Flash_flash_data_write -> Flash:i_avalon_write
+	wire   [31:0] mm_interconnect_0_flash_flash_data_writedata;                                          // mm_interconnect_0:Flash_flash_data_writedata -> Flash:i_avalon_writedata
+	wire          mm_interconnect_0_flash_flash_erase_control_chipselect;                                // mm_interconnect_0:Flash_flash_erase_control_chipselect -> Flash:i_avalon_erase_chip_select
+	wire   [31:0] mm_interconnect_0_flash_flash_erase_control_readdata;                                  // Flash:o_avalon_erase_readdata -> mm_interconnect_0:Flash_flash_erase_control_readdata
+	wire          mm_interconnect_0_flash_flash_erase_control_waitrequest;                               // Flash:o_avalon_erase_waitrequest -> mm_interconnect_0:Flash_flash_erase_control_waitrequest
+	wire          mm_interconnect_0_flash_flash_erase_control_read;                                      // mm_interconnect_0:Flash_flash_erase_control_read -> Flash:i_avalon_erase_read
+	wire    [3:0] mm_interconnect_0_flash_flash_erase_control_byteenable;                                // mm_interconnect_0:Flash_flash_erase_control_byteenable -> Flash:i_avalon_erase_byteenable
+	wire          mm_interconnect_0_flash_flash_erase_control_write;                                     // mm_interconnect_0:Flash_flash_erase_control_write -> Flash:i_avalon_erase_write
+	wire   [31:0] mm_interconnect_0_flash_flash_erase_control_writedata;                                 // mm_interconnect_0:Flash_flash_erase_control_writedata -> Flash:i_avalon_erase_writedata
+	wire   [31:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_readdata;                      // VGA_Subsystem:pixel_dma_control_slave_readdata -> mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_readdata
+	wire    [1:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_address;                       // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_address -> VGA_Subsystem:pixel_dma_control_slave_address
+	wire          mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_read;                          // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_read -> VGA_Subsystem:pixel_dma_control_slave_read
+	wire    [3:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_byteenable;                    // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_byteenable -> VGA_Subsystem:pixel_dma_control_slave_byteenable
+	wire          mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_write;                         // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_write -> VGA_Subsystem:pixel_dma_control_slave_write
+	wire   [31:0] mm_interconnect_0_vga_subsystem_pixel_dma_control_slave_writedata;                     // mm_interconnect_0:VGA_Subsystem_pixel_dma_control_slave_writedata -> VGA_Subsystem:pixel_dma_control_slave_writedata
+	wire   [31:0] mm_interconnect_0_vga_subsystem_rgb_slave_readdata;                                    // VGA_Subsystem:rgb_slave_readdata -> mm_interconnect_0:VGA_Subsystem_rgb_slave_readdata
+	wire          mm_interconnect_0_vga_subsystem_rgb_slave_read;                                        // mm_interconnect_0:VGA_Subsystem_rgb_slave_read -> VGA_Subsystem:rgb_slave_read
+	wire          mm_interconnect_0_sdram_s1_chipselect;                                                 // mm_interconnect_0:SDRAM_s1_chipselect -> SDRAM:az_cs
+	wire   [31:0] mm_interconnect_0_sdram_s1_readdata;                                                   // SDRAM:za_data -> mm_interconnect_0:SDRAM_s1_readdata
+	wire          mm_interconnect_0_sdram_s1_waitrequest;                                                // SDRAM:za_waitrequest -> mm_interconnect_0:SDRAM_s1_waitrequest
+	wire   [24:0] mm_interconnect_0_sdram_s1_address;                                                    // mm_interconnect_0:SDRAM_s1_address -> SDRAM:az_addr
+	wire          mm_interconnect_0_sdram_s1_read;                                                       // mm_interconnect_0:SDRAM_s1_read -> SDRAM:az_rd_n
+	wire    [3:0] mm_interconnect_0_sdram_s1_byteenable;                                                 // mm_interconnect_0:SDRAM_s1_byteenable -> SDRAM:az_be_n
+	wire          mm_interconnect_0_sdram_s1_readdatavalid;                                              // SDRAM:za_valid -> mm_interconnect_0:SDRAM_s1_readdatavalid
+	wire          mm_interconnect_0_sdram_s1_write;                                                      // mm_interconnect_0:SDRAM_s1_write -> SDRAM:az_wr_n
+	wire   [31:0] mm_interconnect_0_sdram_s1_writedata;                                                  // mm_interconnect_0:SDRAM_s1_writedata -> SDRAM:az_data
+	wire          mm_interconnect_0_red_leds_s1_chipselect;                                              // mm_interconnect_0:Red_LEDs_s1_chipselect -> Red_LEDs:chipselect
+	wire   [31:0] mm_interconnect_0_red_leds_s1_readdata;                                                // Red_LEDs:readdata -> mm_interconnect_0:Red_LEDs_s1_readdata
+	wire    [1:0] mm_interconnect_0_red_leds_s1_address;                                                 // mm_interconnect_0:Red_LEDs_s1_address -> Red_LEDs:address
+	wire          mm_interconnect_0_red_leds_s1_write;                                                   // mm_interconnect_0:Red_LEDs_s1_write -> Red_LEDs:write_n
+	wire   [31:0] mm_interconnect_0_red_leds_s1_writedata;                                               // mm_interconnect_0:Red_LEDs_s1_writedata -> Red_LEDs:writedata
+	wire          mm_interconnect_0_green_leds_s1_chipselect;                                            // mm_interconnect_0:Green_LEDs_s1_chipselect -> Green_LEDs:chipselect
+	wire   [31:0] mm_interconnect_0_green_leds_s1_readdata;                                              // Green_LEDs:readdata -> mm_interconnect_0:Green_LEDs_s1_readdata
+	wire    [1:0] mm_interconnect_0_green_leds_s1_address;                                               // mm_interconnect_0:Green_LEDs_s1_address -> Green_LEDs:address
+	wire          mm_interconnect_0_green_leds_s1_write;                                                 // mm_interconnect_0:Green_LEDs_s1_write -> Green_LEDs:write_n
+	wire   [31:0] mm_interconnect_0_green_leds_s1_writedata;                                             // mm_interconnect_0:Green_LEDs_s1_writedata -> Green_LEDs:writedata
+	wire          mm_interconnect_0_hex3_hex0_s1_chipselect;                                             // mm_interconnect_0:HEX3_HEX0_s1_chipselect -> HEX3_HEX0:chipselect
+	wire   [31:0] mm_interconnect_0_hex3_hex0_s1_readdata;                                               // HEX3_HEX0:readdata -> mm_interconnect_0:HEX3_HEX0_s1_readdata
+	wire    [1:0] mm_interconnect_0_hex3_hex0_s1_address;                                                // mm_interconnect_0:HEX3_HEX0_s1_address -> HEX3_HEX0:address
+	wire          mm_interconnect_0_hex3_hex0_s1_write;                                                  // mm_interconnect_0:HEX3_HEX0_s1_write -> HEX3_HEX0:write_n
+	wire   [31:0] mm_interconnect_0_hex3_hex0_s1_writedata;                                              // mm_interconnect_0:HEX3_HEX0_s1_writedata -> HEX3_HEX0:writedata
+	wire          mm_interconnect_0_hex7_hex4_s1_chipselect;                                             // mm_interconnect_0:HEX7_HEX4_s1_chipselect -> HEX7_HEX4:chipselect
+	wire   [31:0] mm_interconnect_0_hex7_hex4_s1_readdata;                                               // HEX7_HEX4:readdata -> mm_interconnect_0:HEX7_HEX4_s1_readdata
+	wire    [1:0] mm_interconnect_0_hex7_hex4_s1_address;                                                // mm_interconnect_0:HEX7_HEX4_s1_address -> HEX7_HEX4:address
+	wire          mm_interconnect_0_hex7_hex4_s1_write;                                                  // mm_interconnect_0:HEX7_HEX4_s1_write -> HEX7_HEX4:write_n
+	wire   [31:0] mm_interconnect_0_hex7_hex4_s1_writedata;                                              // mm_interconnect_0:HEX7_HEX4_s1_writedata -> HEX7_HEX4:writedata
+	wire   [31:0] mm_interconnect_0_slider_switches_s1_readdata;                                         // Slider_Switches:readdata -> mm_interconnect_0:Slider_Switches_s1_readdata
+	wire    [1:0] mm_interconnect_0_slider_switches_s1_address;                                          // mm_interconnect_0:Slider_Switches_s1_address -> Slider_Switches:address
+	wire          mm_interconnect_0_pushbuttons_s1_chipselect;                                           // mm_interconnect_0:Pushbuttons_s1_chipselect -> Pushbuttons:chipselect
+	wire   [31:0] mm_interconnect_0_pushbuttons_s1_readdata;                                             // Pushbuttons:readdata -> mm_interconnect_0:Pushbuttons_s1_readdata
+	wire    [1:0] mm_interconnect_0_pushbuttons_s1_address;                                              // mm_interconnect_0:Pushbuttons_s1_address -> Pushbuttons:address
+	wire          mm_interconnect_0_pushbuttons_s1_write;                                                // mm_interconnect_0:Pushbuttons_s1_write -> Pushbuttons:write_n
+	wire   [31:0] mm_interconnect_0_pushbuttons_s1_writedata;                                            // mm_interconnect_0:Pushbuttons_s1_writedata -> Pushbuttons:writedata
+	wire          mm_interconnect_0_expansion_jp5_s1_chipselect;                                         // mm_interconnect_0:Expansion_JP5_s1_chipselect -> Expansion_JP5:chipselect
+	wire   [31:0] mm_interconnect_0_expansion_jp5_s1_readdata;                                           // Expansion_JP5:readdata -> mm_interconnect_0:Expansion_JP5_s1_readdata
+	wire    [1:0] mm_interconnect_0_expansion_jp5_s1_address;                                            // mm_interconnect_0:Expansion_JP5_s1_address -> Expansion_JP5:address
+	wire          mm_interconnect_0_expansion_jp5_s1_write;                                              // mm_interconnect_0:Expansion_JP5_s1_write -> Expansion_JP5:write_n
+	wire   [31:0] mm_interconnect_0_expansion_jp5_s1_writedata;                                          // mm_interconnect_0:Expansion_JP5_s1_writedata -> Expansion_JP5:writedata
+	wire          mm_interconnect_0_interval_timer_s1_chipselect;                                        // mm_interconnect_0:Interval_Timer_s1_chipselect -> Interval_Timer:chipselect
+	wire   [15:0] mm_interconnect_0_interval_timer_s1_readdata;                                          // Interval_Timer:readdata -> mm_interconnect_0:Interval_Timer_s1_readdata
+	wire    [2:0] mm_interconnect_0_interval_timer_s1_address;                                           // mm_interconnect_0:Interval_Timer_s1_address -> Interval_Timer:address
+	wire          mm_interconnect_0_interval_timer_s1_write;                                             // mm_interconnect_0:Interval_Timer_s1_write -> Interval_Timer:write_n
+	wire   [15:0] mm_interconnect_0_interval_timer_s1_writedata;                                         // mm_interconnect_0:Interval_Timer_s1_writedata -> Interval_Timer:writedata
+	wire          mm_interconnect_0_interval_timer_2_s1_chipselect;                                      // mm_interconnect_0:Interval_Timer_2_s1_chipselect -> Interval_Timer_2:chipselect
+	wire   [15:0] mm_interconnect_0_interval_timer_2_s1_readdata;                                        // Interval_Timer_2:readdata -> mm_interconnect_0:Interval_Timer_2_s1_readdata
+	wire    [2:0] mm_interconnect_0_interval_timer_2_s1_address;                                         // mm_interconnect_0:Interval_Timer_2_s1_address -> Interval_Timer_2:address
+	wire          mm_interconnect_0_interval_timer_2_s1_write;                                           // mm_interconnect_0:Interval_Timer_2_s1_write -> Interval_Timer_2:write_n
+	wire   [15:0] mm_interconnect_0_interval_timer_2_s1_writedata;                                       // mm_interconnect_0:Interval_Timer_2_s1_writedata -> Interval_Timer_2:writedata
+	wire   [31:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_readdata;              // Video_In_Subsystem:video_in_dma_control_slave_readdata -> mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_readdata
+	wire    [1:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_address;               // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_address -> Video_In_Subsystem:video_in_dma_control_slave_address
+	wire          mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_read;                  // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_read -> Video_In_Subsystem:video_in_dma_control_slave_read
+	wire    [3:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_byteenable;            // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_byteenable -> Video_In_Subsystem:video_in_dma_control_slave_byteenable
+	wire          mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_write;                 // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_write -> Video_In_Subsystem:video_in_dma_control_slave_write
+	wire   [31:0] mm_interconnect_0_video_in_subsystem_video_in_dma_control_slave_writedata;             // mm_interconnect_0:Video_In_Subsystem_video_in_dma_control_slave_writedata -> Video_In_Subsystem:video_in_dma_control_slave_writedata
+	wire          mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_chipselect; // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_chipselect -> Video_In_Subsystem:video_in_edge_detection_control_slave_chipselect
+	wire   [31:0] mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_readdata;   // Video_In_Subsystem:video_in_edge_detection_control_slave_readdata -> mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_readdata
+	wire    [1:0] mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_address;    // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_address -> Video_In_Subsystem:video_in_edge_detection_control_slave_address
+	wire          mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_write;      // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_write -> Video_In_Subsystem:video_in_edge_detection_control_slave_write_n
+	wire   [31:0] mm_interconnect_0_video_in_subsystem_video_in_edge_detection_control_slave_writedata;  // mm_interconnect_0:Video_In_Subsystem_video_in_edge_detection_control_slave_writedata -> Video_In_Subsystem:video_in_edge_detection_control_slave_writedata
+	wire          irq_mapper_receiver0_irq;                                                              // Audio_Subsystem:audio_irq_irq -> irq_mapper:receiver0_irq
+	wire          irq_mapper_receiver1_irq;                                                              // PS2_Port:irq -> irq_mapper:receiver1_irq
+	wire          irq_mapper_receiver2_irq;                                                              // PS2_Port_Dual:irq -> irq_mapper:receiver2_irq
+	wire          irq_mapper_receiver3_irq;                                                              // USB:irq -> irq_mapper:receiver3_irq
+	wire          irq_mapper_receiver4_irq;                                                              // Serial_Port:irq -> irq_mapper:receiver4_irq
+	wire          irq_mapper_receiver5_irq;                                                              // IrDA:irq -> irq_mapper:receiver5_irq
+	wire          irq_mapper_receiver6_irq;                                                              // Pushbuttons:irq -> irq_mapper:receiver6_irq
+	wire          irq_mapper_receiver7_irq;                                                              // Expansion_JP5:irq -> irq_mapper:receiver7_irq
+	wire          irq_mapper_receiver8_irq;                                                              // JTAG_UART:av_irq -> irq_mapper:receiver8_irq
+	wire          irq_mapper_receiver9_irq;                                                              // Interval_Timer:irq -> irq_mapper:receiver9_irq
+	wire          irq_mapper_receiver10_irq;                                                             // Interval_Timer_2:irq -> irq_mapper:receiver10_irq
+	wire   [31:0] nios2_irq_irq;                                                                         // irq_mapper:sender_irq -> Nios2:irq
+	wire          rst_controller_reset_out_reset;                                                        // rst_controller:reset_out -> [AV_Config:reset, Char_LCD_16x2:reset, Expansion_JP5:reset_n, Flash:i_reset_n, Green_LEDs:reset_n, HEX3_HEX0:reset_n, HEX7_HEX4:reset_n, Interval_Timer:reset_n, Interval_Timer_2:reset_n, IrDA:reset, JTAG_UART:rst_n, PS2_Port:reset, PS2_Port_Dual:reset, Pushbuttons:reset_n, Red_LEDs:reset_n, SDRAM:reset_n, SD_Card:i_reset_n, SRAM:reset, Serial_Port:reset, Slider_Switches:reset_n, SysID:reset_n, USB:reset, camera:reset_reset_n, mm_interconnect_0:JTAG_to_FPGA_Bridge_clk_reset_reset_bridge_in_reset_reset, mm_interconnect_0:camera_reset_reset_bridge_in_reset_reset]
+	wire          rst_controller_001_reset_out_reset;                                                    // rst_controller_001:reset_out -> [Nios2:reset_n, irq_mapper:reset, mm_interconnect_0:Nios2_reset_reset_bridge_in_reset_reset]
+	wire          nios2_debug_reset_request_reset;                                                       // Nios2:debug_reset_request -> rst_controller_001:reset_in0
 
 	Computer_System_AV_Config av_config (
 		.clk         (system_pll_sys_clk_clk),                                         //                    clk.clk
@@ -887,6 +905,44 @@ module Computer_System (
 		.reset_source_reset (video_pll_reset_source_reset)  // reset_source.reset
 	);
 
+	Computer_System_camera camera (
+		.alt_vip_cti_0_clocked_video_vid_clk           (),                                                                       //       alt_vip_cti_0_clocked_video.vid_clk
+		.alt_vip_cti_0_clocked_video_vid_data          (),                                                                       //                                  .vid_data
+		.alt_vip_cti_0_clocked_video_overflow          (),                                                                       //                                  .overflow
+		.alt_vip_cti_0_clocked_video_vid_datavalid     (),                                                                       //                                  .vid_datavalid
+		.alt_vip_cti_0_clocked_video_vid_locked        (),                                                                       //                                  .vid_locked
+		.alt_vip_cti_0_clocked_video_vid_v_sync        (),                                                                       //                                  .vid_v_sync
+		.alt_vip_cti_0_clocked_video_vid_h_sync        (),                                                                       //                                  .vid_h_sync
+		.alt_vip_cti_0_clocked_video_vid_f             (),                                                                       //                                  .vid_f
+		.alt_vip_vfb_0_dout_ready                      (),                                                                       //                alt_vip_vfb_0_dout.ready
+		.alt_vip_vfb_0_dout_valid                      (),                                                                       //                                  .valid
+		.alt_vip_vfb_0_dout_data                       (),                                                                       //                                  .data
+		.alt_vip_vfb_0_dout_startofpacket              (),                                                                       //                                  .startofpacket
+		.alt_vip_vfb_0_dout_endofpacket                (),                                                                       //                                  .endofpacket
+		.clk_clk                                       (system_pll_sys_clk_clk),                                                 //                               clk.clk
+		.d5m_config_avalon_av_config_slave_address     (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_address),     // d5m_config_avalon_av_config_slave.address
+		.d5m_config_avalon_av_config_slave_byteenable  (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_byteenable),  //                                  .byteenable
+		.d5m_config_avalon_av_config_slave_read        (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_read),        //                                  .read
+		.d5m_config_avalon_av_config_slave_write       (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_write),       //                                  .write
+		.d5m_config_avalon_av_config_slave_writedata   (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_writedata),   //                                  .writedata
+		.d5m_config_avalon_av_config_slave_readdata    (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_readdata),    //                                  .readdata
+		.d5m_config_avalon_av_config_slave_waitrequest (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_waitrequest), //                                  .waitrequest
+		.d5m_config_external_interface_SDAT            (),                                                                       //     d5m_config_external_interface.SDAT
+		.d5m_config_external_interface_SCLK            (),                                                                       //                                  .SCLK
+		.reset_reset_n                                 (~rst_controller_reset_out_reset),                                        //                             reset.reset_n
+		.to_ram_rd_address                             (camera_to_ram_rd_address),                                               //                         to_ram_rd.address
+		.to_ram_rd_read                                (camera_to_ram_rd_read),                                                  //                                  .read
+		.to_ram_rd_waitrequest                         (camera_to_ram_rd_waitrequest),                                           //                                  .waitrequest
+		.to_ram_rd_readdatavalid                       (camera_to_ram_rd_readdatavalid),                                         //                                  .readdatavalid
+		.to_ram_rd_readdata                            (camera_to_ram_rd_readdata),                                              //                                  .readdata
+		.to_ram_rd_burstcount                          (camera_to_ram_rd_burstcount),                                            //                                  .burstcount
+		.to_ram_wr_address                             (camera_to_ram_wr_address),                                               //                         to_ram_wr.address
+		.to_ram_wr_write                               (camera_to_ram_wr_write),                                                 //                                  .write
+		.to_ram_wr_writedata                           (camera_to_ram_wr_writedata),                                             //                                  .writedata
+		.to_ram_wr_waitrequest                         (camera_to_ram_wr_waitrequest),                                           //                                  .waitrequest
+		.to_ram_wr_burstcount                          (camera_to_ram_wr_burstcount)                                             //                                  .burstcount
+	);
+
 	altera_customins_master_translator #(
 		.SHARED_COMB_AND_MULTI (0)
 	) nios2_custom_instruction_master_translator (
@@ -1032,9 +1088,20 @@ module Computer_System (
 
 	Computer_System_mm_interconnect_0 mm_interconnect_0 (
 		.System_PLL_sys_clk_clk                                              (system_pll_sys_clk_clk),                                                                //                                       System_PLL_sys_clk.clk
-		.AV_Config_reset_reset_bridge_in_reset_reset                         (rst_controller_reset_out_reset),                                                        //                    AV_Config_reset_reset_bridge_in_reset.reset
+		.camera_reset_reset_bridge_in_reset_reset                            (rst_controller_reset_out_reset),                                                        //                       camera_reset_reset_bridge_in_reset.reset
 		.JTAG_to_FPGA_Bridge_clk_reset_reset_bridge_in_reset_reset           (rst_controller_reset_out_reset),                                                        //      JTAG_to_FPGA_Bridge_clk_reset_reset_bridge_in_reset.reset
 		.Nios2_reset_reset_bridge_in_reset_reset                             (rst_controller_001_reset_out_reset),                                                    //                        Nios2_reset_reset_bridge_in_reset.reset
+		.camera_to_ram_rd_address                                            (camera_to_ram_rd_address),                                                              //                                         camera_to_ram_rd.address
+		.camera_to_ram_rd_waitrequest                                        (camera_to_ram_rd_waitrequest),                                                          //                                                         .waitrequest
+		.camera_to_ram_rd_burstcount                                         (camera_to_ram_rd_burstcount),                                                           //                                                         .burstcount
+		.camera_to_ram_rd_read                                               (camera_to_ram_rd_read),                                                                 //                                                         .read
+		.camera_to_ram_rd_readdata                                           (camera_to_ram_rd_readdata),                                                             //                                                         .readdata
+		.camera_to_ram_rd_readdatavalid                                      (camera_to_ram_rd_readdatavalid),                                                        //                                                         .readdatavalid
+		.camera_to_ram_wr_address                                            (camera_to_ram_wr_address),                                                              //                                         camera_to_ram_wr.address
+		.camera_to_ram_wr_waitrequest                                        (camera_to_ram_wr_waitrequest),                                                          //                                                         .waitrequest
+		.camera_to_ram_wr_burstcount                                         (camera_to_ram_wr_burstcount),                                                           //                                                         .burstcount
+		.camera_to_ram_wr_write                                              (camera_to_ram_wr_write),                                                                //                                                         .write
+		.camera_to_ram_wr_writedata                                          (camera_to_ram_wr_writedata),                                                            //                                                         .writedata
 		.JTAG_to_FPGA_Bridge_master_address                                  (jtag_to_fpga_bridge_master_address),                                                    //                               JTAG_to_FPGA_Bridge_master.address
 		.JTAG_to_FPGA_Bridge_master_waitrequest                              (jtag_to_fpga_bridge_master_waitrequest),                                                //                                                         .waitrequest
 		.JTAG_to_FPGA_Bridge_master_byteenable                               (jtag_to_fpga_bridge_master_byteenable),                                                 //                                                         .byteenable
@@ -1079,6 +1146,13 @@ module Computer_System (
 		.AV_Config_avalon_av_config_slave_writedata                          (mm_interconnect_0_av_config_avalon_av_config_slave_writedata),                          //                                                         .writedata
 		.AV_Config_avalon_av_config_slave_byteenable                         (mm_interconnect_0_av_config_avalon_av_config_slave_byteenable),                         //                                                         .byteenable
 		.AV_Config_avalon_av_config_slave_waitrequest                        (mm_interconnect_0_av_config_avalon_av_config_slave_waitrequest),                        //                                                         .waitrequest
+		.camera_d5m_config_avalon_av_config_slave_address                    (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_address),                    //                 camera_d5m_config_avalon_av_config_slave.address
+		.camera_d5m_config_avalon_av_config_slave_write                      (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_write),                      //                                                         .write
+		.camera_d5m_config_avalon_av_config_slave_read                       (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_read),                       //                                                         .read
+		.camera_d5m_config_avalon_av_config_slave_readdata                   (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_readdata),                   //                                                         .readdata
+		.camera_d5m_config_avalon_av_config_slave_writedata                  (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_writedata),                  //                                                         .writedata
+		.camera_d5m_config_avalon_av_config_slave_byteenable                 (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_byteenable),                 //                                                         .byteenable
+		.camera_d5m_config_avalon_av_config_slave_waitrequest                (mm_interconnect_0_camera_d5m_config_avalon_av_config_slave_waitrequest),                //                                                         .waitrequest
 		.Char_LCD_16x2_avalon_lcd_slave_address                              (mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_address),                              //                           Char_LCD_16x2_avalon_lcd_slave.address
 		.Char_LCD_16x2_avalon_lcd_slave_write                                (mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_write),                                //                                                         .write
 		.Char_LCD_16x2_avalon_lcd_slave_read                                 (mm_interconnect_0_char_lcd_16x2_avalon_lcd_slave_read),                                 //                                                         .read
