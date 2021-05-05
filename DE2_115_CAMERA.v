@@ -703,9 +703,9 @@ task x_derivative_filter;
 	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
 	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-		pixel_R_out = pixel_R_0/2 - pixel_R_2/2;
-		pixel_G_out = pixel_G_0/2 - pixel_G_2/2;
-		pixel_B_out = pixel_B_0/2 - pixel_B_2/2;
+		pixel_R_out = (pixel_R_0 - pixel_R_2) / 2;
+		pixel_G_out = (pixel_G_0 - pixel_G_2) / 2;
+		pixel_B_out = (pixel_B_0 - pixel_B_2) / 2;
 	end
 endtask
 
@@ -753,7 +753,7 @@ task median_filter;
 endtask
 
 //Apply DIP filter
-always@(posedge VGA_CTRL_CLK)
+always@(posedge VGA_CLK)
 	begin	
 		reg signed	[31:0]	filtered_R;
 		reg signed	[31:0]	filtered_G;
