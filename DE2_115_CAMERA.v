@@ -480,10 +480,20 @@ reg signed	[31:0]	pixel_buffer_1_R		[2:0];
 reg signed	[31:0]	pixel_buffer_1_G		[2:0];
 reg signed	[31:0]	pixel_buffer_1_B		[2:0];
 
-//outputs after stage 2 (x_derivative filter)
+//outputs after stage 2 (median filter)
 reg signed	[31:0]	pixel_buffer_2_R		[2:0];
 reg signed	[31:0]	pixel_buffer_2_G		[2:0];
 reg signed	[31:0]	pixel_buffer_2_B		[2:0];
+
+//outputs after stage 3 (blur filter)
+reg signed	[31:0]	pixel_buffer_3_R		[2:0];
+reg signed	[31:0]	pixel_buffer_3_G		[2:0];
+reg signed	[31:0]	pixel_buffer_3_B		[2:0];
+
+//outputs after stage 4 (x_derivative filter)
+reg signed	[31:0]	pixel_buffer_4_R		[2:0];
+reg signed	[31:0]	pixel_buffer_4_G		[2:0];
+reg signed	[31:0]	pixel_buffer_4_B		[2:0];
 
 //power on start
 wire             auto_start;
@@ -699,12 +709,57 @@ task x_derivative_filter;
 	end
 endtask
 
+task blur_filter;
+	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
+	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
+	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
+	begin
+		pixel_R_out = (pixel_R_0 + pixel_R_1 + pixel_R_2) / 3;
+		pixel_G_out = (pixel_G_0 + pixel_G_1 + pixel_G_2) / 3;
+		pixel_B_out = (pixel_B_0 + pixel_B_1 + pixel_B_2) / 3;
+	end
+endtask
+
+// https://www.geeksforgeeks.org/middle-of-three-using-minimum-comparisons/
+function [31:0] median;
+	input signed	[31:0]	a, b, c;
+	begin
+		reg signed 	[31:0]	x, y, z;
+		
+		x = a - b;
+		y = b - c;
+		z = a - c;
+		
+		if (x * y > 0)
+			median = b;
+		else if (x * z > 0)
+			median = c;
+		else
+			median = a;
+	end
+endfunction
+
+task median_filter;
+	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
+	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
+	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
+	begin
+		pixel_R_out = median(pixel_R_0, pixel_R_1, pixel_R_2);
+		pixel_G_out = median(pixel_G_0, pixel_G_1, pixel_G_2);
+		pixel_B_out = median(pixel_B_0, pixel_B_1, pixel_B_2);
+	end
+endtask
+
 //Apply DIP filter
 always@(posedge VGA_CTRL_CLK)
 	begin	
 		reg signed	[31:0]	filtered_R;
 		reg signed	[31:0]	filtered_G;
 		reg signed	[31:0]	filtered_B;
+		
+		reg signed	[31:0]	pixel_intensity;
 		
 //		Shift buffers to left
 //		Shift Stage 0
@@ -734,6 +789,24 @@ always@(posedge VGA_CTRL_CLK)
 		pixel_buffer_2_G[1] = pixel_buffer_2_G[0];
 		pixel_buffer_2_B[1] = pixel_buffer_2_B[0];
 		
+//		Shift Stage 3
+		pixel_buffer_3_R[2] = pixel_buffer_3_R[1];
+		pixel_buffer_3_G[2] = pixel_buffer_3_G[1];
+		pixel_buffer_3_B[2] = pixel_buffer_3_B[1];
+		
+		pixel_buffer_3_R[1] = pixel_buffer_3_R[0];
+		pixel_buffer_3_G[1] = pixel_buffer_3_G[0];
+		pixel_buffer_3_B[1] = pixel_buffer_3_B[0];
+		
+//		Shift Stage 4
+		pixel_buffer_4_R[2] = pixel_buffer_4_R[1];
+		pixel_buffer_4_G[2] = pixel_buffer_4_G[1];
+		pixel_buffer_4_B[2] = pixel_buffer_4_B[1];
+		
+		pixel_buffer_4_R[1] = pixel_buffer_4_R[0];
+		pixel_buffer_4_G[1] = pixel_buffer_4_G[0];
+		pixel_buffer_4_B[1] = pixel_buffer_4_B[0];
+		
 		
 //		Stage 0: original image
 		pixel_buffer_R[0] = Read_DATA2[9:0];
@@ -748,9 +821,10 @@ always@(posedge VGA_CTRL_CLK)
 //		Stage 1: grayscale filter
 		if (SW[1])
 			begin
-				pixel_buffer_1_R[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
-				pixel_buffer_1_G[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
-				pixel_buffer_1_B[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+				pixel_intensity = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+				pixel_buffer_1_R[0] = pixel_intensity;
+				pixel_buffer_1_G[0] = pixel_intensity;
+				pixel_buffer_1_B[0] = pixel_intensity;
 //				filtered_R = pixel_intensity[0];
 //				filtered_G = pixel_intensity[0];
 //				filtered_B = pixel_intensity[0];
@@ -762,13 +836,13 @@ always@(posedge VGA_CTRL_CLK)
 				pixel_buffer_1_B[0] = pixel_buffer_B[0];
 			end
 		
-//		Stage 2: x_derivative filter
+//		Stage 2: median filter
 		if (SW[2])
 			begin
-				x_derivative_filter(	pixel_buffer_1_R[0], pixel_buffer_1_G[0], pixel_buffer_1_B[0], 
-											pixel_buffer_1_R[1], pixel_buffer_1_G[1], pixel_buffer_1_B[1], 
-											pixel_buffer_1_R[2], pixel_buffer_1_G[2], pixel_buffer_1_B[2],
-											pixel_buffer_2_R[0], pixel_buffer_2_G[0], pixel_buffer_2_B[0]);
+				median_filter(	pixel_buffer_1_R[0], pixel_buffer_1_G[0], pixel_buffer_1_B[0], 
+									pixel_buffer_1_R[1], pixel_buffer_1_G[1], pixel_buffer_1_B[1], 
+									pixel_buffer_1_R[2], pixel_buffer_1_G[2], pixel_buffer_1_B[2],
+									pixel_buffer_2_R[0], pixel_buffer_2_G[0], pixel_buffer_2_B[0]);
 			end
 		else
 			begin
@@ -776,11 +850,41 @@ always@(posedge VGA_CTRL_CLK)
 				pixel_buffer_2_G[0] = pixel_buffer_1_G[0];
 				pixel_buffer_2_B[0] = pixel_buffer_1_B[0];
 			end
+		
+//		Stage 3: blur filter
+		if (SW[3])
+			begin
+				blur_filter(	pixel_buffer_2_R[0], pixel_buffer_2_G[0], pixel_buffer_2_B[0], 
+									pixel_buffer_2_R[1], pixel_buffer_2_G[1], pixel_buffer_2_B[1], 
+									pixel_buffer_2_R[2], pixel_buffer_2_G[2], pixel_buffer_2_B[2],
+									pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0]);
+			end
+		else
+			begin
+				pixel_buffer_3_R[0] = pixel_buffer_2_R[0];
+				pixel_buffer_3_G[0] = pixel_buffer_2_G[0];
+				pixel_buffer_3_B[0] = pixel_buffer_2_B[0];
+			end
+		
+//		Stage 4: x_derivative filter
+		if (SW[4])
+			begin
+				x_derivative_filter(	pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0], 
+											pixel_buffer_3_R[1], pixel_buffer_3_G[1], pixel_buffer_3_B[1], 
+											pixel_buffer_3_R[2], pixel_buffer_3_G[2], pixel_buffer_3_B[2],
+											pixel_buffer_4_R[0], pixel_buffer_4_G[0], pixel_buffer_4_B[0]);
+			end
+		else
+			begin
+				pixel_buffer_4_R[0] = pixel_buffer_3_R[0];
+				pixel_buffer_4_G[0] = pixel_buffer_3_G[0];
+				pixel_buffer_4_B[0] = pixel_buffer_3_B[0];
+			end
 			
 //		Copy result into filtered RGB
-		filtered_R = pixel_buffer_2_R[0];
-		filtered_G = pixel_buffer_2_G[0];
-		filtered_B = pixel_buffer_2_B[0];
+		filtered_R = pixel_buffer_4_R[0];
+		filtered_G = pixel_buffer_4_G[0];
+		filtered_B = pixel_buffer_4_B[0];
 		
 		if (filtered_R > 32'h3FF)
 			filtered_R = 32'h3FF;
