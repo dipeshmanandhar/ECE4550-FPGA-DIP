@@ -464,6 +464,10 @@ wire	[9:0]	oVGA_R;   				//	VGA Red[9:0]
 wire	[9:0]	oVGA_G;	 				//	VGA Green[9:0]
 wire	[9:0]	oVGA_B;   				//	VGA Blue[9:0]
 
+reg	[9:0]	iVGA_R;   				//	VGA input Red[9:0]
+reg	[9:0]	iVGA_G;	 				//	VGA input Green[9:0]
+reg	[9:0]	iVGA_B;   				//	VGA input Blue[9:0]
+
 //power on start
 wire             auto_start;
 //=======================================================
@@ -649,9 +653,9 @@ I2C_CCD_Config 		u8	(	//	Host Side
 //VGA DISPLAY
 VGA_Controller		u1	(	//	Host Side
 							.oRequest(Read),
-							.iRed(Read_DATA2[9:0]),
-							.iGreen({Read_DATA1[14:10],Read_DATA2[14:10]}),
-							.iBlue(Read_DATA1[9:0]),
+							.iRed(iVGA_R),
+							.iGreen(iVGA_G),
+							.iBlue(iVGA_B),
 							//	VGA Side
 							.oVGA_R(oVGA_R),
 							.oVGA_G(oVGA_G),
@@ -665,5 +669,42 @@ VGA_Controller		u1	(	//	Host Side
 							.iRST_N(DLY_RST_2),
 							.iZOOM_MODE_SW(SW[16])
 						);
+
+//Apply DIP filter
+always@(posedge VGA_CTRL_CLK)
+	begin
+		reg	[31:0]	original_R;
+		reg	[31:0]	original_G;
+		reg	[31:0]	original_B;
+		
+		reg	[31:0]	temp_R;
+		reg	[31:0]	temp_G;
+		reg	[31:0]	temp_B;
+		
+		original_R[9:0] = Read_DATA2[9:0];
+		original_G[9:0] = {Read_DATA1[14:10],Read_DATA2[14:10]};
+		original_B[9:0] = Read_DATA1[9:0];
+		
+		temp_R = original_R / 10;
+		temp_G = original_G * 3/2;
+		temp_B = original_B / 10;
+		
+		if (temp_R > 32'h3FF)
+		begin
+			temp_R = 32'h3FF;
+		end
+		if (temp_G > 32'h3FF)
+		begin
+			temp_G = 32'h3FF;
+		end
+		if (temp_B > 32'h3FF)
+		begin
+			temp_B = 32'h3FF;
+		end
+		
+		iVGA_R = temp_R[9:0];
+		iVGA_G = temp_G[9:0];
+		iVGA_B = temp_B[9:0];
+	end
 
 endmodule

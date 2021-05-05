@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP4CE115F29) Path("C:/Users/Nripesh/Documents/UVA/Semester6/FPGA/FinalProject/ECE4550-FPGA-DIP/") File("DE2_115_CAMERA.sof") MfrSpec(OpMask(1));
+		Device PartName(EP4CE115F29) Path("C:/Users/Dipesh/Documents/UVA/Dipesh/Third_Year_2020_2021/Semester_6/ECE_4550/Project/ECE4550-FPGA-DIP/") File("DE2_115_CAMERA.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 
