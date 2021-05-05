@@ -468,6 +468,10 @@ reg	[9:0]	iVGA_R;   				//	VGA input Red[9:0]
 reg	[9:0]	iVGA_G;	 				//	VGA input Green[9:0]
 reg	[9:0]	iVGA_B;   				//	VGA input Blue[9:0]
 
+reg signed	[31:0] pixel_buffer_R	[2:0];
+reg signed	[31:0] pixel_buffer_G	[2:0];
+reg signed	[31:0] pixel_buffer_B	[2:0];
+
 //power on start
 wire             auto_start;
 //=======================================================
@@ -673,34 +677,40 @@ VGA_Controller		u1	(	//	Host Side
 //Apply DIP filter
 always@(posedge VGA_CTRL_CLK)
 	begin
-		reg	[31:0]	original_R;
-		reg	[31:0]	original_G;
-		reg	[31:0]	original_B;
+		reg signed	[31:0]	temp_R;
+		reg signed	[31:0]	temp_G;
+		reg signed	[31:0]	temp_B;
 		
-		reg	[31:0]	temp_R;
-		reg	[31:0]	temp_G;
-		reg	[31:0]	temp_B;
+		pixel_buffer_R[2] = pixel_buffer_R[1];
+		pixel_buffer_G[2] = pixel_buffer_G[1];
+		pixel_buffer_B[2] = pixel_buffer_B[1];
 		
-		original_R[9:0] = Read_DATA2[9:0];
-		original_G[9:0] = {Read_DATA1[14:10],Read_DATA2[14:10]};
-		original_B[9:0] = Read_DATA1[9:0];
+		pixel_buffer_R[1] = pixel_buffer_R[0];
+		pixel_buffer_G[1] = pixel_buffer_G[0];
+		pixel_buffer_B[1] = pixel_buffer_B[0];
 		
-		temp_R = original_R / 10;
-		temp_G = original_G * 3/2;
-		temp_B = original_B / 10;
+		pixel_buffer_R[0] = Read_DATA2[9:0];
+		pixel_buffer_G[0] = {Read_DATA1[14:10],Read_DATA2[14:10]};
+		pixel_buffer_B[0] = Read_DATA1[9:0];
+		
+		temp_R = pixel_buffer_R[0]/2 - pixel_buffer_R[2]/2;
+		temp_G = pixel_buffer_G[0]/2 - pixel_buffer_G[2]/2;
+		temp_B = pixel_buffer_B[0]/2 - pixel_buffer_B[2]/2;
 		
 		if (temp_R > 32'h3FF)
-		begin
 			temp_R = 32'h3FF;
-		end
+		else if (temp_R < 0)
+			temp_R = 0;
+		
 		if (temp_G > 32'h3FF)
-		begin
 			temp_G = 32'h3FF;
-		end
+		else if (temp_G < 0)
+			temp_G = 0;
+		
 		if (temp_B > 32'h3FF)
-		begin
 			temp_B = 32'h3FF;
-		end
+		else if (temp_B < 0)
+			temp_B = 0;
 		
 		iVGA_R = temp_R[9:0];
 		iVGA_G = temp_G[9:0];
