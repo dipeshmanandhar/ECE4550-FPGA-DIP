@@ -468,9 +468,10 @@ reg	[9:0]	iVGA_R;   				//	VGA input Red[9:0]
 reg	[9:0]	iVGA_G;	 				//	VGA input Green[9:0]
 reg	[9:0]	iVGA_B;   				//	VGA input Blue[9:0]
 
-reg signed	[31:0] pixel_buffer_R	[2:0];
-reg signed	[31:0] pixel_buffer_G	[2:0];
-reg signed	[31:0] pixel_buffer_B	[2:0];
+reg signed	[31:0]	pixel_buffer_R		[2:0];
+reg signed	[31:0]	pixel_buffer_G		[2:0];
+reg signed	[31:0]	pixel_buffer_B		[2:0];
+reg signed 	[31:0]	pixel_intensity	[2:0];
 
 //power on start
 wire             auto_start;
@@ -673,48 +674,62 @@ VGA_Controller		u1	(	//	Host Side
 							.iRST_N(DLY_RST_2),
 							.iZOOM_MODE_SW(SW[16])
 						);
+						
+task x_derivative_filter;
+	output signed [31:0] filtered_R, filtered_G, filtered_B;
+	begin
+		reg signed	[31:0]	temp_intensity;
+		
+		temp_intensity = pixel_intensity[0]/2 - pixel_intensity[2]/2;
+		filtered_R = temp_intensity;
+		filtered_G = temp_intensity;
+		filtered_B = temp_intensity;
+	end
+endtask
 
 //Apply DIP filter
 always@(posedge VGA_CTRL_CLK)
-	begin
-		reg signed	[31:0]	temp_R;
-		reg signed	[31:0]	temp_G;
-		reg signed	[31:0]	temp_B;
+	begin	
+		reg signed	[31:0]	filtered_R;
+		reg signed	[31:0]	filtered_G;
+		reg signed	[31:0]	filtered_B;
 		
 		pixel_buffer_R[2] = pixel_buffer_R[1];
 		pixel_buffer_G[2] = pixel_buffer_G[1];
 		pixel_buffer_B[2] = pixel_buffer_B[1];
+		pixel_intensity[2] = pixel_intensity[1];
 		
 		pixel_buffer_R[1] = pixel_buffer_R[0];
 		pixel_buffer_G[1] = pixel_buffer_G[0];
 		pixel_buffer_B[1] = pixel_buffer_B[0];
+		pixel_intensity[1] = pixel_intensity[0];
 		
 		pixel_buffer_R[0] = Read_DATA2[9:0];
 		pixel_buffer_G[0] = {Read_DATA1[14:10],Read_DATA2[14:10]};
 		pixel_buffer_B[0] = Read_DATA1[9:0];
+		pixel_intensity[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+			
+		// apply a filter
+		x_derivative_filter(filtered_R, filtered_G, filtered_B);
 		
-		temp_R = pixel_buffer_R[0]/2 - pixel_buffer_R[2]/2;
-		temp_G = pixel_buffer_G[0]/2 - pixel_buffer_G[2]/2;
-		temp_B = pixel_buffer_B[0]/2 - pixel_buffer_B[2]/2;
+		if (filtered_R > 32'h3FF)
+			filtered_R = 32'h3FF;
+		else if (filtered_R < 0)
+			filtered_R = 0;
 		
-		if (temp_R > 32'h3FF)
-			temp_R = 32'h3FF;
-		else if (temp_R < 0)
-			temp_R = 0;
+		if (filtered_G > 32'h3FF)
+			filtered_G = 32'h3FF;
+		else if (filtered_G < 0)
+			filtered_G = 0;
 		
-		if (temp_G > 32'h3FF)
-			temp_G = 32'h3FF;
-		else if (temp_G < 0)
-			temp_G = 0;
+		if (filtered_B > 32'h3FF)
+			filtered_B = 32'h3FF;
+		else if (filtered_B < 0)
+			filtered_B = 0;
 		
-		if (temp_B > 32'h3FF)
-			temp_B = 32'h3FF;
-		else if (temp_B < 0)
-			temp_B = 0;
-		
-		iVGA_R = temp_R[9:0];
-		iVGA_G = temp_G[9:0];
-		iVGA_B = temp_B[9:0];
+		iVGA_R = filtered_R[9:0];
+		iVGA_G = filtered_G[9:0];
+		iVGA_B = filtered_B[9:0];
 	end
 
 endmodule
