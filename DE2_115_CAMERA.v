@@ -468,10 +468,22 @@ reg	[9:0]	iVGA_R;   				//	VGA input Red[9:0]
 reg	[9:0]	iVGA_G;	 				//	VGA input Green[9:0]
 reg	[9:0]	iVGA_B;   				//	VGA input Blue[9:0]
 
-reg signed	[31:0]	pixel_buffer_R		[2:0];
-reg signed	[31:0]	pixel_buffer_G		[2:0];
-reg signed	[31:0]	pixel_buffer_B		[2:0];
-reg signed 	[31:0]	pixel_intensity	[2:0];
+//outputs after stage 0 (original image)
+reg signed	[31:0]	pixel_buffer_R			[2:0];
+reg signed	[31:0]	pixel_buffer_G			[2:0];
+reg signed	[31:0]	pixel_buffer_B			[2:0];
+
+//reg signed 	[31:0]	pixel_intensity	[2:0];
+
+//outputs after stage 1 (grayscale)
+reg signed	[31:0]	pixel_buffer_1_R		[2:0];
+reg signed	[31:0]	pixel_buffer_1_G		[2:0];
+reg signed	[31:0]	pixel_buffer_1_B		[2:0];
+
+//outputs after stage 2 (x_derivative filter)
+reg signed	[31:0]	pixel_buffer_2_R		[2:0];
+reg signed	[31:0]	pixel_buffer_2_G		[2:0];
+reg signed	[31:0]	pixel_buffer_2_B		[2:0];
 
 //power on start
 wire             auto_start;
@@ -676,14 +688,14 @@ VGA_Controller		u1	(	//	Host Side
 						);
 						
 task x_derivative_filter;
-	output signed [31:0] filtered_R, filtered_G, filtered_B;
+	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
+	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
+	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-		reg signed	[31:0]	temp_intensity;
-		
-		temp_intensity = pixel_intensity[0]/2 - pixel_intensity[2]/2;
-		filtered_R = temp_intensity;
-		filtered_G = temp_intensity;
-		filtered_B = temp_intensity;
+		pixel_R_out = pixel_R_0/2 - pixel_R_2/2;
+		pixel_G_out = pixel_G_0/2 - pixel_G_2/2;
+		pixel_B_out = pixel_B_0/2 - pixel_B_2/2;
 	end
 endtask
 
@@ -694,23 +706,81 @@ always@(posedge VGA_CTRL_CLK)
 		reg signed	[31:0]	filtered_G;
 		reg signed	[31:0]	filtered_B;
 		
+//		Shift buffers to left
+//		Shift Stage 0
 		pixel_buffer_R[2] = pixel_buffer_R[1];
 		pixel_buffer_G[2] = pixel_buffer_G[1];
 		pixel_buffer_B[2] = pixel_buffer_B[1];
-		pixel_intensity[2] = pixel_intensity[1];
 		
 		pixel_buffer_R[1] = pixel_buffer_R[0];
 		pixel_buffer_G[1] = pixel_buffer_G[0];
 		pixel_buffer_B[1] = pixel_buffer_B[0];
-		pixel_intensity[1] = pixel_intensity[0];
 		
+//		Shift Stage 1
+		pixel_buffer_1_R[2] = pixel_buffer_1_R[1];
+		pixel_buffer_1_G[2] = pixel_buffer_1_G[1];
+		pixel_buffer_1_B[2] = pixel_buffer_1_B[1];
+		
+		pixel_buffer_1_R[1] = pixel_buffer_1_R[0];
+		pixel_buffer_1_G[1] = pixel_buffer_1_G[0];
+		pixel_buffer_1_B[1] = pixel_buffer_1_B[0];
+		
+//		Shift Stage 2
+		pixel_buffer_2_R[2] = pixel_buffer_2_R[1];
+		pixel_buffer_2_G[2] = pixel_buffer_2_G[1];
+		pixel_buffer_2_B[2] = pixel_buffer_2_B[1];
+		
+		pixel_buffer_2_R[1] = pixel_buffer_2_R[0];
+		pixel_buffer_2_G[1] = pixel_buffer_2_G[0];
+		pixel_buffer_2_B[1] = pixel_buffer_2_B[0];
+		
+		
+//		Stage 0: original image
 		pixel_buffer_R[0] = Read_DATA2[9:0];
 		pixel_buffer_G[0] = {Read_DATA1[14:10],Read_DATA2[14:10]};
 		pixel_buffer_B[0] = Read_DATA1[9:0];
-		pixel_intensity[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+//		pixel_intensity[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+		
+//		filtered_R = pixel_buffer_R[0];
+//	   filtered_G = pixel_buffer_G[0];
+//		filtered_B = pixel_buffer_B[0];
+		
+//		Stage 1: grayscale filter
+		if (SW[1])
+			begin
+				pixel_buffer_1_R[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+				pixel_buffer_1_G[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+				pixel_buffer_1_B[0] = (pixel_buffer_R[0] + pixel_buffer_G[0] + pixel_buffer_B[0]) / 3;
+//				filtered_R = pixel_intensity[0];
+//				filtered_G = pixel_intensity[0];
+//				filtered_B = pixel_intensity[0];
+			end
+		else
+			begin
+				pixel_buffer_1_R[0] = pixel_buffer_R[0];
+				pixel_buffer_1_G[0] = pixel_buffer_G[0];
+				pixel_buffer_1_B[0] = pixel_buffer_B[0];
+			end
+		
+//		Stage 2: x_derivative filter
+		if (SW[2])
+			begin
+				x_derivative_filter(	pixel_buffer_1_R[0], pixel_buffer_1_G[0], pixel_buffer_1_B[0], 
+											pixel_buffer_1_R[1], pixel_buffer_1_G[1], pixel_buffer_1_B[1], 
+											pixel_buffer_1_R[2], pixel_buffer_1_G[2], pixel_buffer_1_B[2],
+											pixel_buffer_2_R[0], pixel_buffer_2_G[0], pixel_buffer_2_B[0]);
+			end
+		else
+			begin
+				pixel_buffer_2_R[0] = pixel_buffer_1_R[0];
+				pixel_buffer_2_G[0] = pixel_buffer_1_G[0];
+				pixel_buffer_2_B[0] = pixel_buffer_1_B[0];
+			end
 			
-		// apply a filter
-		x_derivative_filter(filtered_R, filtered_G, filtered_B);
+//		Copy result into filtered RGB
+		filtered_R = pixel_buffer_2_R[0];
+		filtered_G = pixel_buffer_2_G[0];
+		filtered_B = pixel_buffer_2_B[0];
 		
 		if (filtered_R > 32'h3FF)
 			filtered_R = 32'h3FF;
