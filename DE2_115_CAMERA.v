@@ -716,6 +716,27 @@ task x_derivative_filter;
 	end
 endtask
 
+task laplace;
+	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
+	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
+	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	input signed	[31:0]	pixel_R_3, pixel_G_3, pixel_B_3;
+	input signed	[31:0]	pixel_R_4, pixel_G_4, pixel_B_4;
+	input signed	[31:0]	pixel_R_5, pixel_G_5, pixel_B_5;
+	input signed	[31:0]	pixel_R_6, pixel_G_6, pixel_B_6;
+	input signed	[31:0]	pixel_R_7, pixel_G_7, pixel_B_7;
+	input signed	[31:0]	pixel_R_8, pixel_G_8, pixel_B_8;
+	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
+	begin
+		pixel_R_out = 	-(pixel_R_8 + pixel_R_7 * 2 + pixel_R_6 * 3  + pixel_R_5 * 4) + (pixel_R_4 * 20) - 
+							 (pixel_R_0 + pixel_R_1 * 2 + pixel_R_2 * 3  + pixel_R_3 * 4);
+		pixel_G_out = 	-(pixel_G_8 + pixel_G_7 * 2 + pixel_G_6 * 3  + pixel_G_5 * 4) + (pixel_G_4 * 20) - 
+							 (pixel_G_0 + pixel_G_1 * 2 + pixel_G_2 * 3  + pixel_G_3 * 4);
+		pixel_B_out = 	-(pixel_B_8 + pixel_B_7 * 2 + pixel_B_6 * 3  + pixel_B_5 * 4) + (pixel_B_4 * 20) - 
+							 (pixel_B_0 + pixel_B_1 * 2 + pixel_B_2 * 3  + pixel_B_3 * 4);
+	end
+endtask
+
 task blur_filter;
 	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
 	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
@@ -763,13 +784,13 @@ task comparator3;
 	input signed	[31:0]	a, b, c;
 	output signed	[32:0]	max, mid, min;
 	begin
-		reg signed 	[31:0]	x, y, z;
+//		reg signed 	[31:0]	x, y, z;
 		
-		x = a - b;
-		y = b - c;
-		z = a - c;
+//		x = a - b;
+//		y = b - c;
+//		z = a - c;
 		
-		if (x * y > 0)
+		if ((a > b && b > c) || (a < b && b < c))
 			begin
 				mid = b;
 				if(a > mid)
@@ -783,7 +804,7 @@ task comparator3;
 						min = a;
 					end
 			end
-		else if (x * z > 0)
+		else if ((a > c && c > b) || (a < c && c < b))
 			begin
 				mid = c;
 				if(a > mid)
@@ -1169,7 +1190,7 @@ always@(posedge VGA_CLK)
 //		Stage 4: x_derivative filter
 		if (SW[4])
 			begin
-				x_derivative_filter(	pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0], 
+				laplace(	pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0], 
 											pixel_buffer_3_R[1], pixel_buffer_3_G[1], pixel_buffer_3_B[1], 
 											pixel_buffer_3_R[2], pixel_buffer_3_G[2], pixel_buffer_3_B[2], 
 											pixel_buffer_3_R[3], pixel_buffer_3_G[3], pixel_buffer_3_B[3], 
