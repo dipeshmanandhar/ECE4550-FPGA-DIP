@@ -469,31 +469,29 @@ reg	[9:0]	iVGA_G;	 				//	VGA input Green[9:0]
 reg	[9:0]	iVGA_B;   				//	VGA input Blue[9:0]
 
 //outputs after stage 0 (original image)
-reg signed	[31:0]	pixel_buffer_R			[2:0];
-reg signed	[31:0]	pixel_buffer_G			[2:0];
-reg signed	[31:0]	pixel_buffer_B			[2:0];
-
-//reg signed 	[31:0]	pixel_intensity	[2:0];
+reg signed	[31:0]	pixel_buffer_R		[8:0];
+reg signed	[31:0]	pixel_buffer_G		[8:0];
+reg signed	[31:0]	pixel_buffer_B		[8:0];
 
 //outputs after stage 1 (grayscale)
-reg signed	[31:0]	pixel_buffer_1_R		[2:0];
-reg signed	[31:0]	pixel_buffer_1_G		[2:0];
-reg signed	[31:0]	pixel_buffer_1_B		[2:0];
+reg signed	[31:0]	pixel_buffer_1_R	[8:0];
+reg signed	[31:0]	pixel_buffer_1_G	[8:0];
+reg signed	[31:0]	pixel_buffer_1_B	[8:0];
 
 //outputs after stage 2 (median filter)
-reg signed	[31:0]	pixel_buffer_2_R		[2:0];
-reg signed	[31:0]	pixel_buffer_2_G		[2:0];
-reg signed	[31:0]	pixel_buffer_2_B		[2:0];
+reg signed	[31:0]	pixel_buffer_2_R	[8:0];
+reg signed	[31:0]	pixel_buffer_2_G	[8:0];
+reg signed	[31:0]	pixel_buffer_2_B	[8:0];
 
 //outputs after stage 3 (blur filter)
-reg signed	[31:0]	pixel_buffer_3_R		[2:0];
-reg signed	[31:0]	pixel_buffer_3_G		[2:0];
-reg signed	[31:0]	pixel_buffer_3_B		[2:0];
+reg signed	[31:0]	pixel_buffer_3_R	[8:0];
+reg signed	[31:0]	pixel_buffer_3_G	[8:0];
+reg signed	[31:0]	pixel_buffer_3_B	[8:0];
 
 //outputs after stage 4 (x_derivative filter)
-reg signed	[31:0]	pixel_buffer_4_R		[2:0];
-reg signed	[31:0]	pixel_buffer_4_G		[2:0];
-reg signed	[31:0]	pixel_buffer_4_B		[2:0];
+reg signed	[31:0]	pixel_buffer_4_R	[8:0];
+reg signed	[31:0]	pixel_buffer_4_G	[8:0];
+reg signed	[31:0]	pixel_buffer_4_B	[8:0];
 
 //power on start
 wire             auto_start;
@@ -701,11 +699,17 @@ task x_derivative_filter;
 	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
 	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
 	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	input signed	[31:0]	pixel_R_3, pixel_G_3, pixel_B_3;
+	input signed	[31:0]	pixel_R_4, pixel_G_4, pixel_B_4;
+	input signed	[31:0]	pixel_R_5, pixel_G_5, pixel_B_5;
+	input signed	[31:0]	pixel_R_6, pixel_G_6, pixel_B_6;
+	input signed	[31:0]	pixel_R_7, pixel_G_7, pixel_B_7;
+	input signed	[31:0]	pixel_R_8, pixel_G_8, pixel_B_8;
 	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-		pixel_R_out = (pixel_R_0 - pixel_R_2) / 2;
-		pixel_G_out = (pixel_G_0 - pixel_G_2) / 2;
-		pixel_B_out = (pixel_B_0 - pixel_B_2) / 2;
+		pixel_R_out = (pixel_R_3 - pixel_R_5) / 2;
+		pixel_G_out = (pixel_G_3 - pixel_G_5) / 2;
+		pixel_B_out = (pixel_B_3 - pixel_B_5) / 2;
 	end
 endtask
 
@@ -713,11 +717,23 @@ task blur_filter;
 	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
 	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
 	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	input signed	[31:0]	pixel_R_3, pixel_G_3, pixel_B_3;
+	input signed	[31:0]	pixel_R_4, pixel_G_4, pixel_B_4;
+	input signed	[31:0]	pixel_R_5, pixel_G_5, pixel_B_5;
+	input signed	[31:0]	pixel_R_6, pixel_G_6, pixel_B_6;
+	input signed	[31:0]	pixel_R_7, pixel_G_7, pixel_B_7;
+	input signed	[31:0]	pixel_R_8, pixel_G_8, pixel_B_8;
 	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-		pixel_R_out = (pixel_R_0 + pixel_R_1 + pixel_R_2) / 3;
-		pixel_G_out = (pixel_G_0 + pixel_G_1 + pixel_G_2) / 3;
-		pixel_B_out = (pixel_B_0 + pixel_B_1 + pixel_B_2) / 3;
+		pixel_R_out = (pixel_R_0 + pixel_R_1 + pixel_R_2 + 
+							pixel_R_3 + pixel_R_4 + pixel_R_5 + 
+							pixel_R_6 + pixel_R_7 + pixel_R_8) / 9;
+		pixel_G_out = (pixel_G_0 + pixel_G_1 + pixel_G_2 + 
+							pixel_G_3 + pixel_G_4 + pixel_G_5 + 
+							pixel_G_6 + pixel_G_7 + pixel_G_8) / 9;
+		pixel_B_out = (pixel_B_0 + pixel_B_1 + pixel_B_2 + 
+							pixel_B_3 + pixel_B_4 + pixel_B_5 + 
+							pixel_B_6 + pixel_B_7 + pixel_B_8) / 9;
 	end
 endtask
 
@@ -744,11 +760,27 @@ task median_filter;
 	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
 	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
 	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
+	input signed	[31:0]	pixel_R_3, pixel_G_3, pixel_B_3;
+	input signed	[31:0]	pixel_R_4, pixel_G_4, pixel_B_4;
+	input signed	[31:0]	pixel_R_5, pixel_G_5, pixel_B_5;
+	input signed	[31:0]	pixel_R_6, pixel_G_6, pixel_B_6;
+	input signed	[31:0]	pixel_R_7, pixel_G_7, pixel_B_7;
+	input signed	[31:0]	pixel_R_8, pixel_G_8, pixel_B_8;
 	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-		pixel_R_out = median(pixel_R_0, pixel_R_1, pixel_R_2);
-		pixel_G_out = median(pixel_G_0, pixel_G_1, pixel_G_2);
-		pixel_B_out = median(pixel_B_0, pixel_B_1, pixel_B_2);
+//		pixel_R_out = median(pixel_R_0, pixel_R_1, pixel_R_2);
+//		pixel_G_out = median(pixel_G_0, pixel_G_1, pixel_G_2);
+//		pixel_B_out = median(pixel_B_0, pixel_B_1, pixel_B_2);
+
+		pixel_R_out = median(median(pixel_R_0, pixel_R_1, pixel_R_2), 
+									median(pixel_R_3, pixel_R_4, pixel_R_5), 
+									median(pixel_R_6, pixel_R_7, pixel_R_8));
+		pixel_G_out = median(median(pixel_G_0, pixel_G_1, pixel_G_2), 
+									median(pixel_G_3, pixel_G_4, pixel_G_5), 
+									median(pixel_G_6, pixel_G_7, pixel_G_8));
+		pixel_B_out = median(median(pixel_B_0, pixel_B_1, pixel_B_2), 
+									median(pixel_B_3, pixel_B_4, pixel_B_5), 
+									median(pixel_B_6, pixel_B_7, pixel_B_8));
 	end
 endtask
 
@@ -763,6 +795,30 @@ always@(posedge VGA_CLK)
 		
 //		Shift buffers to left
 //		Shift Stage 0
+		pixel_buffer_R[8] = pixel_buffer_R[7];
+		pixel_buffer_G[8] = pixel_buffer_G[7];
+		pixel_buffer_B[8] = pixel_buffer_B[7];
+		
+		pixel_buffer_R[7] = pixel_buffer_R[6];
+		pixel_buffer_G[7] = pixel_buffer_G[6];
+		pixel_buffer_B[7] = pixel_buffer_B[6];
+		
+		pixel_buffer_R[6] = pixel_buffer_R[5];
+		pixel_buffer_G[6] = pixel_buffer_G[5];
+		pixel_buffer_B[6] = pixel_buffer_B[5];
+		
+		pixel_buffer_R[5] = pixel_buffer_R[4];
+		pixel_buffer_G[5] = pixel_buffer_G[4];
+		pixel_buffer_B[5] = pixel_buffer_B[4];
+		
+		pixel_buffer_R[4] = pixel_buffer_R[3];
+		pixel_buffer_G[4] = pixel_buffer_G[3];
+		pixel_buffer_B[4] = pixel_buffer_B[3];
+		
+		pixel_buffer_R[3] = pixel_buffer_R[2];
+		pixel_buffer_G[3] = pixel_buffer_G[2];
+		pixel_buffer_B[3] = pixel_buffer_B[2];
+		
 		pixel_buffer_R[2] = pixel_buffer_R[1];
 		pixel_buffer_G[2] = pixel_buffer_G[1];
 		pixel_buffer_B[2] = pixel_buffer_B[1];
@@ -772,6 +828,30 @@ always@(posedge VGA_CLK)
 		pixel_buffer_B[1] = pixel_buffer_B[0];
 		
 //		Shift Stage 1
+		pixel_buffer_1_R[8] = pixel_buffer_1_R[7];
+		pixel_buffer_1_G[8] = pixel_buffer_1_G[7];
+		pixel_buffer_1_B[8] = pixel_buffer_1_B[7];
+		
+		pixel_buffer_1_R[7] = pixel_buffer_1_R[6];
+		pixel_buffer_1_G[7] = pixel_buffer_1_G[6];
+		pixel_buffer_1_B[7] = pixel_buffer_1_B[6];
+		
+		pixel_buffer_1_R[6] = pixel_buffer_1_R[5];
+		pixel_buffer_1_G[6] = pixel_buffer_1_G[5];
+		pixel_buffer_1_B[6] = pixel_buffer_1_B[5];
+		
+		pixel_buffer_1_R[5] = pixel_buffer_1_R[4];
+		pixel_buffer_1_G[5] = pixel_buffer_1_G[4];
+		pixel_buffer_1_B[5] = pixel_buffer_1_B[4];
+		
+		pixel_buffer_1_R[4] = pixel_buffer_1_R[3];
+		pixel_buffer_1_G[4] = pixel_buffer_1_G[3];
+		pixel_buffer_1_B[4] = pixel_buffer_1_B[3];
+		
+		pixel_buffer_1_R[3] = pixel_buffer_1_R[2];
+		pixel_buffer_1_G[3] = pixel_buffer_1_G[2];
+		pixel_buffer_1_B[3] = pixel_buffer_1_B[2];
+		
 		pixel_buffer_1_R[2] = pixel_buffer_1_R[1];
 		pixel_buffer_1_G[2] = pixel_buffer_1_G[1];
 		pixel_buffer_1_B[2] = pixel_buffer_1_B[1];
@@ -781,6 +861,30 @@ always@(posedge VGA_CLK)
 		pixel_buffer_1_B[1] = pixel_buffer_1_B[0];
 		
 //		Shift Stage 2
+		pixel_buffer_2_R[8] = pixel_buffer_2_R[7];
+		pixel_buffer_2_G[8] = pixel_buffer_2_G[7];
+		pixel_buffer_2_B[8] = pixel_buffer_2_B[7];
+		
+		pixel_buffer_2_R[7] = pixel_buffer_2_R[6];
+		pixel_buffer_2_G[7] = pixel_buffer_2_G[6];
+		pixel_buffer_2_B[7] = pixel_buffer_2_B[6];
+		
+		pixel_buffer_2_R[6] = pixel_buffer_2_R[5];
+		pixel_buffer_2_G[6] = pixel_buffer_2_G[5];
+		pixel_buffer_2_B[6] = pixel_buffer_2_B[5];
+		
+		pixel_buffer_2_R[5] = pixel_buffer_2_R[4];
+		pixel_buffer_2_G[5] = pixel_buffer_2_G[4];
+		pixel_buffer_2_B[5] = pixel_buffer_2_B[4];
+		
+		pixel_buffer_2_R[4] = pixel_buffer_2_R[3];
+		pixel_buffer_2_G[4] = pixel_buffer_2_G[3];
+		pixel_buffer_2_B[4] = pixel_buffer_2_B[3];
+		
+		pixel_buffer_2_R[3] = pixel_buffer_2_R[2];
+		pixel_buffer_2_G[3] = pixel_buffer_2_G[2];
+		pixel_buffer_2_B[3] = pixel_buffer_2_B[2];
+		
 		pixel_buffer_2_R[2] = pixel_buffer_2_R[1];
 		pixel_buffer_2_G[2] = pixel_buffer_2_G[1];
 		pixel_buffer_2_B[2] = pixel_buffer_2_B[1];
@@ -790,6 +894,30 @@ always@(posedge VGA_CLK)
 		pixel_buffer_2_B[1] = pixel_buffer_2_B[0];
 		
 //		Shift Stage 3
+		pixel_buffer_3_R[8] = pixel_buffer_3_R[7];
+		pixel_buffer_3_G[8] = pixel_buffer_3_G[7];
+		pixel_buffer_3_B[8] = pixel_buffer_3_B[7];
+		
+		pixel_buffer_3_R[7] = pixel_buffer_3_R[6];
+		pixel_buffer_3_G[7] = pixel_buffer_3_G[6];
+		pixel_buffer_3_B[7] = pixel_buffer_3_B[6];
+		
+		pixel_buffer_3_R[6] = pixel_buffer_3_R[5];
+		pixel_buffer_3_G[6] = pixel_buffer_3_G[5];
+		pixel_buffer_3_B[6] = pixel_buffer_3_B[5];
+		
+		pixel_buffer_3_R[5] = pixel_buffer_3_R[4];
+		pixel_buffer_3_G[5] = pixel_buffer_3_G[4];
+		pixel_buffer_3_B[5] = pixel_buffer_3_B[4];
+		
+		pixel_buffer_3_R[4] = pixel_buffer_3_R[3];
+		pixel_buffer_3_G[4] = pixel_buffer_3_G[3];
+		pixel_buffer_3_B[4] = pixel_buffer_3_B[3];
+		
+		pixel_buffer_3_R[3] = pixel_buffer_3_R[2];
+		pixel_buffer_3_G[3] = pixel_buffer_3_G[2];
+		pixel_buffer_3_B[3] = pixel_buffer_3_B[2];
+		
 		pixel_buffer_3_R[2] = pixel_buffer_3_R[1];
 		pixel_buffer_3_G[2] = pixel_buffer_3_G[1];
 		pixel_buffer_3_B[2] = pixel_buffer_3_B[1];
@@ -799,6 +927,30 @@ always@(posedge VGA_CLK)
 		pixel_buffer_3_B[1] = pixel_buffer_3_B[0];
 		
 //		Shift Stage 4
+		pixel_buffer_4_R[8] = pixel_buffer_4_R[7];
+		pixel_buffer_4_G[8] = pixel_buffer_4_G[7];
+		pixel_buffer_4_B[8] = pixel_buffer_4_B[7];
+		
+		pixel_buffer_4_R[7] = pixel_buffer_4_R[6];
+		pixel_buffer_4_G[7] = pixel_buffer_4_G[6];
+		pixel_buffer_4_B[7] = pixel_buffer_4_B[6];
+		
+		pixel_buffer_4_R[6] = pixel_buffer_4_R[5];
+		pixel_buffer_4_G[6] = pixel_buffer_4_G[5];
+		pixel_buffer_4_B[6] = pixel_buffer_4_B[5];
+		
+		pixel_buffer_4_R[5] = pixel_buffer_4_R[4];
+		pixel_buffer_4_G[5] = pixel_buffer_4_G[4];
+		pixel_buffer_4_B[5] = pixel_buffer_4_B[4];
+		
+		pixel_buffer_4_R[4] = pixel_buffer_4_R[3];
+		pixel_buffer_4_G[4] = pixel_buffer_4_G[3];
+		pixel_buffer_4_B[4] = pixel_buffer_4_B[3];
+		
+		pixel_buffer_4_R[3] = pixel_buffer_4_R[2];
+		pixel_buffer_4_G[3] = pixel_buffer_4_G[2];
+		pixel_buffer_4_B[3] = pixel_buffer_4_B[2];
+		
 		pixel_buffer_4_R[2] = pixel_buffer_4_R[1];
 		pixel_buffer_4_G[2] = pixel_buffer_4_G[1];
 		pixel_buffer_4_B[2] = pixel_buffer_4_B[1];
@@ -825,9 +977,6 @@ always@(posedge VGA_CLK)
 				pixel_buffer_1_R[0] = pixel_intensity;
 				pixel_buffer_1_G[0] = pixel_intensity;
 				pixel_buffer_1_B[0] = pixel_intensity;
-//				filtered_R = pixel_intensity[0];
-//				filtered_G = pixel_intensity[0];
-//				filtered_B = pixel_intensity[0];
 			end
 		else
 			begin
@@ -841,7 +990,13 @@ always@(posedge VGA_CLK)
 			begin
 				median_filter(	pixel_buffer_1_R[0], pixel_buffer_1_G[0], pixel_buffer_1_B[0], 
 									pixel_buffer_1_R[1], pixel_buffer_1_G[1], pixel_buffer_1_B[1], 
-									pixel_buffer_1_R[2], pixel_buffer_1_G[2], pixel_buffer_1_B[2],
+									pixel_buffer_1_R[2], pixel_buffer_1_G[2], pixel_buffer_1_B[2], 
+									pixel_buffer_1_R[3], pixel_buffer_1_G[3], pixel_buffer_1_B[3], 
+									pixel_buffer_1_R[4], pixel_buffer_1_G[4], pixel_buffer_1_B[4], 
+									pixel_buffer_1_R[5], pixel_buffer_1_G[5], pixel_buffer_1_B[5], 
+									pixel_buffer_1_R[6], pixel_buffer_1_G[6], pixel_buffer_1_B[6], 
+									pixel_buffer_1_R[7], pixel_buffer_1_G[7], pixel_buffer_1_B[7], 
+									pixel_buffer_1_R[8], pixel_buffer_1_G[8], pixel_buffer_1_B[8],
 									pixel_buffer_2_R[0], pixel_buffer_2_G[0], pixel_buffer_2_B[0]);
 			end
 		else
@@ -856,7 +1011,13 @@ always@(posedge VGA_CLK)
 			begin
 				blur_filter(	pixel_buffer_2_R[0], pixel_buffer_2_G[0], pixel_buffer_2_B[0], 
 									pixel_buffer_2_R[1], pixel_buffer_2_G[1], pixel_buffer_2_B[1], 
-									pixel_buffer_2_R[2], pixel_buffer_2_G[2], pixel_buffer_2_B[2],
+									pixel_buffer_2_R[2], pixel_buffer_2_G[2], pixel_buffer_2_B[2], 
+									pixel_buffer_2_R[3], pixel_buffer_2_G[3], pixel_buffer_2_B[3], 
+									pixel_buffer_2_R[4], pixel_buffer_2_G[4], pixel_buffer_2_B[4], 
+									pixel_buffer_2_R[5], pixel_buffer_2_G[5], pixel_buffer_2_B[5], 
+									pixel_buffer_2_R[6], pixel_buffer_2_G[6], pixel_buffer_2_B[6], 
+									pixel_buffer_2_R[7], pixel_buffer_2_G[7], pixel_buffer_2_B[7], 
+									pixel_buffer_2_R[8], pixel_buffer_2_G[8], pixel_buffer_2_B[8],
 									pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0]);
 			end
 		else
@@ -871,7 +1032,13 @@ always@(posedge VGA_CLK)
 			begin
 				x_derivative_filter(	pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0], 
 											pixel_buffer_3_R[1], pixel_buffer_3_G[1], pixel_buffer_3_B[1], 
-											pixel_buffer_3_R[2], pixel_buffer_3_G[2], pixel_buffer_3_B[2],
+											pixel_buffer_3_R[2], pixel_buffer_3_G[2], pixel_buffer_3_B[2], 
+											pixel_buffer_3_R[3], pixel_buffer_3_G[3], pixel_buffer_3_B[3], 
+											pixel_buffer_3_R[4], pixel_buffer_3_G[4], pixel_buffer_3_B[4], 
+											pixel_buffer_3_R[5], pixel_buffer_3_G[5], pixel_buffer_3_B[5], 
+											pixel_buffer_3_R[6], pixel_buffer_3_G[6], pixel_buffer_3_B[6], 
+											pixel_buffer_3_R[7], pixel_buffer_3_G[7], pixel_buffer_3_B[7], 
+											pixel_buffer_3_R[8], pixel_buffer_3_G[8], pixel_buffer_3_B[8],
 											pixel_buffer_4_R[0], pixel_buffer_4_G[0], pixel_buffer_4_B[0]);
 			end
 		else
