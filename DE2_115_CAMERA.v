@@ -493,6 +493,11 @@ reg signed	[31:0]	pixel_buffer_4_R	[8:0];
 reg signed	[31:0]	pixel_buffer_4_G	[8:0];
 reg signed	[31:0]	pixel_buffer_4_B	[8:0];
 
+//outputs after stage 5 (laplace filter)
+//reg signed	[31:0]	pixel_buffer_5_R	[8:0];
+//reg signed	[31:0]	pixel_buffer_5_G	[8:0];
+//reg signed	[31:0]	pixel_buffer_5_B	[8:0];
+
 //power on start
 wire             auto_start;
 //=======================================================
@@ -707,16 +712,16 @@ task x_derivative_filter;
 	input signed	[31:0]	pixel_R_8, pixel_G_8, pixel_B_8;
 	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-		pixel_R_out = 	(pixel_R_8 / 4 + pixel_R_7 / 3 + pixel_R_6 / 2  + pixel_R_5) - 
-							(pixel_R_0 / 4 + pixel_R_1 / 3 + pixel_R_2 / 2  + pixel_R_3);
-		pixel_G_out = 	(pixel_G_8 / 4 + pixel_G_7 / 3 + pixel_G_6 / 2  + pixel_G_5) - 
-							(pixel_G_0 / 4 + pixel_G_1 / 3 + pixel_G_2 / 2  + pixel_G_3);
-		pixel_B_out = 	(pixel_B_8 / 4 + pixel_B_7 / 3 + pixel_B_6 / 2  + pixel_B_5) - 
-							(pixel_B_0 / 4 + pixel_B_1 / 3 + pixel_B_2 / 2  + pixel_B_3);
+		pixel_R_out = 	(pixel_R_8 + pixel_R_7 + pixel_R_6  + pixel_R_5) - 
+							(pixel_R_0 + pixel_R_1 + pixel_R_2  + pixel_R_3);
+		pixel_G_out = 	(pixel_G_8 + pixel_G_7 + pixel_G_6  + pixel_G_5) - 
+							(pixel_G_0 + pixel_G_1 + pixel_G_2  + pixel_G_3);
+		pixel_B_out = 	(pixel_B_8 + pixel_B_7 + pixel_B_6  + pixel_B_5) - 
+							(pixel_B_0 + pixel_B_1 + pixel_B_2  + pixel_B_3);
 	end
 endtask
 
-task laplace;
+task laplace_filter;
 	input signed	[31:0]	pixel_R_0, pixel_G_0, pixel_B_0;
 	input signed	[31:0]	pixel_R_1, pixel_G_1, pixel_B_1;
 	input signed	[31:0]	pixel_R_2, pixel_G_2, pixel_B_2;
@@ -1119,6 +1124,39 @@ always@(posedge VGA_CLK)
 		pixel_buffer_4_G[1] = pixel_buffer_4_G[0];
 		pixel_buffer_4_B[1] = pixel_buffer_4_B[0];
 		
+//		Shift Stage 5
+//		pixel_buffer_5_R[8] = pixel_buffer_5_R[7];
+//		pixel_buffer_5_G[8] = pixel_buffer_5_G[7];
+//		pixel_buffer_5_B[8] = pixel_buffer_5_B[7];
+//		
+//		pixel_buffer_5_R[7] = pixel_buffer_5_R[6];
+//		pixel_buffer_5_G[7] = pixel_buffer_5_G[6];
+//		pixel_buffer_5_B[7] = pixel_buffer_5_B[6];
+//		
+//		pixel_buffer_5_R[6] = pixel_buffer_5_R[5];
+//		pixel_buffer_5_G[6] = pixel_buffer_5_G[5];
+//		pixel_buffer_5_B[6] = pixel_buffer_5_B[5];
+//		
+//		pixel_buffer_5_R[5] = pixel_buffer_5_R[4];
+//		pixel_buffer_5_G[5] = pixel_buffer_5_G[4];
+//		pixel_buffer_5_B[5] = pixel_buffer_5_B[4];
+//		
+//		pixel_buffer_5_R[4] = pixel_buffer_5_R[3];
+//		pixel_buffer_5_G[4] = pixel_buffer_5_G[3];
+//		pixel_buffer_5_B[4] = pixel_buffer_5_B[3];
+//		
+//		pixel_buffer_5_R[3] = pixel_buffer_5_R[2];
+//		pixel_buffer_5_G[3] = pixel_buffer_5_G[2];
+//		pixel_buffer_5_B[3] = pixel_buffer_5_B[2];
+//		
+//		pixel_buffer_5_R[2] = pixel_buffer_5_R[1];
+//		pixel_buffer_5_G[2] = pixel_buffer_5_G[1];
+//		pixel_buffer_5_B[2] = pixel_buffer_5_B[1];
+//		
+//		pixel_buffer_5_R[1] = pixel_buffer_5_R[0];
+//		pixel_buffer_5_G[1] = pixel_buffer_5_G[0];
+//		pixel_buffer_5_B[1] = pixel_buffer_5_B[0];
+		
 		
 //		Stage 0: original image
 		pixel_buffer_R[0] = Read_DATA2[9:0];
@@ -1190,7 +1228,7 @@ always@(posedge VGA_CLK)
 //		Stage 4: x_derivative filter
 		if (SW[4])
 			begin
-				laplace(	pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0], 
+				x_derivative_filter(	pixel_buffer_3_R[0], pixel_buffer_3_G[0], pixel_buffer_3_B[0], 
 											pixel_buffer_3_R[1], pixel_buffer_3_G[1], pixel_buffer_3_B[1], 
 											pixel_buffer_3_R[2], pixel_buffer_3_G[2], pixel_buffer_3_B[2], 
 											pixel_buffer_3_R[3], pixel_buffer_3_G[3], pixel_buffer_3_B[3], 
@@ -1207,6 +1245,27 @@ always@(posedge VGA_CLK)
 				pixel_buffer_4_G[0] = pixel_buffer_3_G[0];
 				pixel_buffer_4_B[0] = pixel_buffer_3_B[0];
 			end
+		
+//		Stage 5: laplace filter
+//		if (SW[5])
+//			begin
+//				laplace_filter(	pixel_buffer_4_R[0], pixel_buffer_4_G[0], pixel_buffer_4_B[0], 
+//										pixel_buffer_4_R[1], pixel_buffer_4_G[1], pixel_buffer_4_B[1], 
+//										pixel_buffer_4_R[2], pixel_buffer_4_G[2], pixel_buffer_4_B[2], 
+//										pixel_buffer_4_R[3], pixel_buffer_4_G[3], pixel_buffer_4_B[3], 
+//										pixel_buffer_4_R[4], pixel_buffer_4_G[4], pixel_buffer_4_B[4], 
+//										pixel_buffer_4_R[5], pixel_buffer_4_G[5], pixel_buffer_4_B[5], 
+//										pixel_buffer_4_R[6], pixel_buffer_4_G[6], pixel_buffer_4_B[6], 
+//										pixel_buffer_4_R[7], pixel_buffer_4_G[7], pixel_buffer_4_B[7], 
+//										pixel_buffer_4_R[8], pixel_buffer_4_G[8], pixel_buffer_4_B[8],
+//										pixel_buffer_5_R[0], pixel_buffer_5_G[0], pixel_buffer_5_B[0]);
+//			end
+//		else
+//			begin
+//				pixel_buffer_5_R[0] = pixel_buffer_4_R[0];
+//				pixel_buffer_5_G[0] = pixel_buffer_4_G[0];
+//				pixel_buffer_5_B[0] = pixel_buffer_4_B[0];
+//			end
 			
 //		Copy result into filtered RGB
 		filtered_R = pixel_buffer_4_R[0];
