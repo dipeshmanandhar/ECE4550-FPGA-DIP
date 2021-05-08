@@ -789,12 +789,6 @@ task comparator3;
 	input signed	[31:0]	a, b, c;
 	output signed	[32:0]	max, mid, min;
 	begin
-//		reg signed 	[31:0]	x, y, z;
-		
-//		x = a - b;
-//		y = b - c;
-//		z = a - c;
-		
 		if ((a > b && b > c) || (a < b && b < c))
 			begin
 				mid = b;
@@ -859,52 +853,17 @@ task fast_median_filter;
 		reg signed	[31:0]	unused_32;
 		
 //		First layer
-		comparator3(pixel_0,
-						pixel_1,
-						pixel_2,
-						c_1_max,
-						c_1_mid,
-						c_1_min);
-		comparator3(pixel_3,
-						pixel_4,
-						pixel_5,
-						c_2_max,
-						c_2_mid,
-						c_2_min);
-		comparator3(pixel_6,
-						pixel_7,
-						pixel_8,
-						c_3_max,
-						c_3_mid,
-						c_3_min);
+		comparator3(pixel_0, pixel_1, pixel_2, c_1_max, c_1_mid, c_1_min);
+		comparator3(pixel_3, pixel_4, pixel_5, c_2_max, c_2_mid, c_2_min);
+		comparator3(pixel_6, pixel_7, pixel_8, c_3_max, c_3_mid, c_3_min);
 		
 //		Second layer
-		comparator3(c_1_max,
-						c_2_max,
-						c_3_max,
-						unused_32,
-						unused_32,
-						c_max);
-		comparator3(c_1_mid,
-						c_2_mid,
-						c_3_mid,
-						unused_32,
-						c_mid,
-						unused_32);
-		comparator3(c_1_min,
-						c_2_min,
-						c_3_min,
-						c_min,
-						unused_32,
-						unused_32);
+		comparator3(c_1_max, c_2_max, c_3_max, unused_32, unused_32, c_max);
+		comparator3(c_1_mid, c_2_mid, c_3_mid, unused_32, c_mid, unused_32);
+		comparator3(c_1_min, c_2_min, c_3_min, c_min, unused_32, unused_32);
 		
 //		Third layer
-		comparator3(c_min,
-						c_mid,
-						c_max,
-						unused_32,
-						pixel_out,
-						unused_32);
+		comparator3(c_min, c_mid, c_max, unused_32, pixel_out, unused_32);
 	end
 endtask
 
@@ -920,20 +879,6 @@ task median_filter;
 	input signed	[31:0]	pixel_R_8, pixel_G_8, pixel_B_8;
 	output signed	[31:0]	pixel_R_out, pixel_G_out, pixel_B_out;
 	begin
-//		pixel_R_out = median(pixel_R_0, pixel_R_1, pixel_R_2);
-//		pixel_G_out = median(pixel_G_0, pixel_G_1, pixel_G_2);
-//		pixel_B_out = median(pixel_B_0, pixel_B_1, pixel_B_2);
-
-//		pixel_R_out = median(median(pixel_R_0, pixel_R_1, pixel_R_2), 
-//									median(pixel_R_3, pixel_R_4, pixel_R_5), 
-//									median(pixel_R_6, pixel_R_7, pixel_R_8));
-//		pixel_G_out = median(median(pixel_G_0, pixel_G_1, pixel_G_2), 
-//									median(pixel_G_3, pixel_G_4, pixel_G_5), 
-//									median(pixel_G_6, pixel_G_7, pixel_G_8));
-//		pixel_B_out = median(median(pixel_B_0, pixel_B_1, pixel_B_2), 
-//									median(pixel_B_3, pixel_B_4, pixel_B_5), 
-//									median(pixel_B_6, pixel_B_7, pixel_B_8
-
 		fast_median_filter(	pixel_R_0, pixel_R_1, pixel_R_2, 
 									pixel_R_3, pixel_R_4, pixel_R_5, 
 									pixel_R_6, pixel_R_7, pixel_R_8,
